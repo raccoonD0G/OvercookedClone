@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Interfaces/InteractableInterface.h"
+#include "Recipe.h"
 #include "Refrigerator.generated.h"
 
 UCLASS()
@@ -17,5 +18,9 @@ public:
 
 public:
 	virtual void Interact_Implementation(AActor* Caller) override;
+
+private:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	TMap<EIngredientType, TSubclassOf<class AIngredient>> IngredientClasses;
 	
 };
