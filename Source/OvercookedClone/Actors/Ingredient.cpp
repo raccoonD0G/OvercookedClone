@@ -26,3 +26,9 @@ AIngredient::AIngredient()
     TextComponent->SetHorizontalAlignment(EHorizTextAligment::EHTA_Center);
     TextComponent->SetWorldSize(50.f);
 }
+
+void AIngredient::ChangeIngredient(EIngredientState NewIngredientState)
+{
+    if (IngredientState != EIngredientState::Raw) return;
+    IngredientState = NewIngredientState;
+}

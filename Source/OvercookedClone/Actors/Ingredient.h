@@ -16,6 +16,10 @@ public:
 	// Sets default values for this actor's properties
 	AIngredient();
 
+public:
+	UFUNCTION(BlueprintCallable, Category = "Ingredient")
+	void ChangeIngredient(EIngredientState NewIngredientState);
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<class UBoxComponent> BoxComponent;
