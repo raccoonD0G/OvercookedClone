@@ -2,7 +2,7 @@
 
 
 #include "Actors/Appliance.h"
-#include "Interfaces/ChangeIngredientTypeInterface.h"
+#include "Interfaces/ChangeIngredientStateInterface.h"
 #include "Components/TextRenderComponent.h"
 #include "Components/BoxComponent.h"
 
@@ -29,12 +29,12 @@ AAppliance::AAppliance()
 
 void AAppliance::Interact_Implementation(AActor* Caller)
 {
-	if (!Caller || !Caller->GetClass()->ImplementsInterface(UChangeIngredientTypeInterface::StaticClass()))
+	if (!Caller || !Caller->GetClass()->ImplementsInterface(UChangeIngredientStateInterface::StaticClass()))
 	{
 		return;
 	}
 
-	IChangeIngredientTypeInterface::Execute_ChangeIngredientState(Caller, OutIngredientState);
+	IChangeIngredientStateInterface::Execute_ChangeIngredientState(Caller, OutIngredientState);
 	
 }
 

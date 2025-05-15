@@ -3,13 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "Actors/InteractableBase.h"
 #include "Recipe.h"
-#include "Interfaces/InteractableInterface.h"
 #include "Appliance.generated.h"
 
 UCLASS()
-class OVERCOOKEDCLONE_API AAppliance : public AActor, public IInteractableInterface
+class OVERCOOKEDCLONE_API AAppliance : public AInteractableBase
 {
 	GENERATED_BODY()
 	
