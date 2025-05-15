@@ -18,7 +18,7 @@ public:
 
 public:
 	UFUNCTION(BlueprintCallable, Category = "Ingredient")
-	void ChangeIngredient(EIngredientState NewIngredientState);
+	void ChangeIngredientState(EIngredientState NewIngredientState);
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)

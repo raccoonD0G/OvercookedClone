@@ -27,7 +27,7 @@ AIngredient::AIngredient()
     TextComponent->SetWorldSize(50.f);
 }
 
-void AIngredient::ChangeIngredient(EIngredientState NewIngredientState)
+void AIngredient::ChangeIngredientState(EIngredientState NewIngredientState)
 {
     if (IngredientState != EIngredientState::Raw) return;
     IngredientState = NewIngredientState;
