@@ -17,4 +17,9 @@ public:
 	
 public:
 	FOrder GenerateOrder();
+	FORCEINLINE void SetTargetTable(class ACustomerTable* NewTable) { TargetTable = NewTable; }
+
+private:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class ACustomerTable> TargetTable;
 };

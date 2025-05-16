@@ -5,6 +5,8 @@
 #include "Characters/Customer.h"
 #include "Engine/World.h"
 #include "TimerManager.h"
+#include "Subsystem/CustomerTableSubsystem.h"
+#include "Actors/CustomerTable.h"
 
 ACustomerSpawner::ACustomerSpawner()
 {
@@ -33,5 +35,20 @@ void ACustomerSpawner::SpawnCustomer()
 	FRotator SpawnRotation = FRotator::ZeroRotator;
 
 	FActorSpawnParameters SpawnParams;
-	GetWorld()->SpawnActor<ACustomer>(CustomerClass, SpawnLocation, SpawnRotation, SpawnParams);
+	ACustomer* Customer = GetWorld()->SpawnActor<ACustomer>(CustomerClass, SpawnLocation, SpawnRotation, SpawnParams);
+	UCustomerTableSubsystem* TableSubsystem = GetWorld()->GetSubsystem<UCustomerTableSubsystem>();
+
+	if (TableSubsystem)
+	{
+		ACustomerTable* Table = TableSubsystem->GetNotOccupiedTable();
+		if (Table)
+		{
+			Customer->SetTargetTable(Table);
+		}
+		else
+		{
+			Customer->Destroy();
+		}
+	}
+	
 }
