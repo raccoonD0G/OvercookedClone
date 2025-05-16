@@ -14,4 +14,7 @@ class OVERCOOKEDCLONE_API AFood : public AActor
 public:	
 	AFood();
 
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<class UStaticMeshComponent> MeshComponent;
 };

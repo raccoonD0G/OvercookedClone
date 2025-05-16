@@ -1,0 +1,51 @@
+[
+	{
+		"Name": "SaladRecipe",
+		"RecipeType": "Salad",
+		"RequiredIngredients": [
+			{
+				"Ingredient": "Lettuce",
+				"RequiredState": "Chopped"
+			},
+			{
+				"Ingredient": "Tomato",
+				"RequiredState": "Chopped"
+			}
+		]
+	},
+	{
+		"Name": "Soup",
+		"RecipeType": "None",
+		"RequiredIngredients": []
+	},
+	{
+		"Name": "Sushi",
+		"RecipeType": "None",
+		"RequiredIngredients": []
+	},
+	{
+		"Name": "Hamburger",
+		"RecipeType": "None",
+		"RequiredIngredients": []
+	},
+	{
+		"Name": "Pizza",
+		"RecipeType": "None",
+		"RequiredIngredients": []
+	},
+	{
+		"Name": "Burrito",
+		"RecipeType": "None",
+		"RequiredIngredients": []
+	},
+	{
+		"Name": "FriedDish",
+		"RecipeType": "None",
+		"RequiredIngredients": []
+	},
+	{
+		"Name": "Cake",
+		"RecipeType": "None",
+		"RequiredIngredients": []
+	}
+]

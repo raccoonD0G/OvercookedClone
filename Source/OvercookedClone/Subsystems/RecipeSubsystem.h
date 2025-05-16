@@ -16,15 +16,18 @@ class OVERCOOKEDCLONE_API URecipeSubsystem : public UGameInstanceSubsystem
 	GENERATED_BODY()
 	
 public:
-	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
+    virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 
-	const class URecipeAsset* GetRecipeByType(ERecipeType RecipeType) const;
+    const FRecipeData* GetRecipeByType(ERecipeType RecipeType) const;
 
 private:
-	void LoadAllRecipes();
+    void LoadAllRecipes();
 
-	UPROPERTY()
-	TArray<TObjectPtr<class URecipeAsset>> LoadedRecipes;
+    UPROPERTY(BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+    TObjectPtr<UDataTable> RecipeTable;
+
+    // Ä³½Ã
+    TMap<ERecipeType, FRecipeData> LoadedRecipes;
 	
 	
 };
