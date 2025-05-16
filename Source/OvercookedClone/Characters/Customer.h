@@ -19,7 +19,7 @@ public:
 	void Init(class ACustomerTable* NewTable, class ACashRegister* NewCashRegister);
 
 	UFUNCTION(BlueprintCallable)
-	FOrder GenerateOrder();
+	void GenerateOrder();
 
 	FORCEINLINE void SetTargetTable(class ACustomerTable* NewTable) { TargetTable = NewTable; }
 	FORCEINLINE void SetCashRegister(class ACashRegister* NewCashRegister) { CashRegister = NewCashRegister; }

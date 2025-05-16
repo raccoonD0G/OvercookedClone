@@ -17,7 +17,7 @@ void ACustomer::Init(ACustomerTable* NewTable, ACashRegister* NewCashRegister)
 	SetCashRegister(NewCashRegister);
 }
 
-FOrder ACustomer::GenerateOrder()
+void ACustomer::GenerateOrder()
 {
 	FOrder NewOrder;
 	NewOrder.CustomerTable = TargetTable;
