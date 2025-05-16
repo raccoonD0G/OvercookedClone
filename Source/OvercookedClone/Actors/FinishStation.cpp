@@ -21,6 +21,7 @@ void AFinishStation::PostInitializeComponents()
 
 }
 
+// TODO
 void AFinishStation::OnActorClicked(AActor* TouchedActor, FKey ButtonPressed)
 {
 	AFood* NewFood = GetWorld()->SpawnActor<AFood>();
