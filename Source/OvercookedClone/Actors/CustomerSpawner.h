@@ -20,6 +20,7 @@ protected:
 private:
 	void SpawnCustomer();
 
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<class ACustomer> CustomerClass;
 
 	FTimerHandle SpawnTimerHandle;
