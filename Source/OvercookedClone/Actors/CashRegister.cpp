@@ -2,27 +2,36 @@
 
 
 #include "Actors/CashRegister.h"
+#include "Interfaces/TakeOrderInterface.h"
+#include "Actors/FinishStation.h"
 
 
-// Sets default values
 ACashRegister::ACashRegister()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 }
 
-// Called when the game starts or when spawned
-void ACashRegister::BeginPlay()
+void ACashRegister::Interact_Implementation(AActor* Caller)
 {
-	Super::BeginPlay();
-	
+	if (!Caller || !Caller->GetClass()->ImplementsInterface(UTakeOrderInterface::StaticClass()))
+	{
+		return;
+	}
+
+	if (!FinishStation) return;
+
+	FinishStation->SetCurrentOrder(Orders[0]);
+	ITakeOrderInterface::Execute_SetCurrentRecipe(Caller, Orders[0].RecipeType);
+	DeleteOrder();
 }
 
-// Called every frame
-void ACashRegister::Tick(float DeltaTime)
+void ACashRegister::AddOrder(FOrder Order)
 {
-	Super::Tick(DeltaTime);
-
+	Orders.Add(Order);
 }
 
+void ACashRegister::DeleteOrder()
+{
+	Orders.RemoveAt(0);
+}

@@ -4,25 +4,30 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Recipe.h"
+#include "Order.h"
+#include "Interfaces/InteractableInterface.h"
 #include "CashRegister.generated.h"
 
 UCLASS()
-class OVERCOOKEDCLONE_API ACashRegister : public AActor
+class OVERCOOKEDCLONE_API ACashRegister : public AActor, public IInteractableInterface
 {
 	GENERATED_BODY()
 	
 public:	
-	// Sets default values for this actor's properties
-	ACashRegister();
+	ACashRegister();	
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+public:
+	virtual void Interact_Implementation(AActor* Caller) override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	void AddOrder(FOrder Order);
+	void DeleteOrder();
 
-	
-	
+private:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	TArray<FOrder> Orders;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class AFinishStation> FinishStation;
+
 };
