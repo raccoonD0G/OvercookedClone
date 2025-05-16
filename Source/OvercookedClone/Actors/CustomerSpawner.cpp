@@ -7,6 +7,8 @@
 #include "TimerManager.h"
 #include "Subsystem/CustomerTableSubsystem.h"
 #include "Actors/CustomerTable.h"
+#include "Actors/CashRegister.h"
+#include "Kismet/GameplayStatics.h"
 
 ACustomerSpawner::ACustomerSpawner()
 {
@@ -31,24 +33,26 @@ void ACustomerSpawner::SpawnCustomer()
 {
 	if (!CustomerClass) return;
 
-	FVector SpawnLocation = FVector::ZeroVector; // (0,0,0)
+	UCustomerTableSubsystem* TableSubsystem = GetWorld()->GetSubsystem<UCustomerTableSubsystem>();
+	if (!TableSubsystem) return;
+
+	ACustomerTable* Table = TableSubsystem->GetNotOccupiedTable();
+	if (!Table) return;
+
+	FVector SpawnLocation = FVector::ZeroVector;
 	FRotator SpawnRotation = FRotator::ZeroRotator;
 
-	FActorSpawnParameters SpawnParams;
-	ACustomer* Customer = GetWorld()->SpawnActor<ACustomer>(CustomerClass, SpawnLocation, SpawnRotation, SpawnParams);
-	UCustomerTableSubsystem* TableSubsystem = GetWorld()->GetSubsystem<UCustomerTableSubsystem>();
+	FTransform SpawnTransform(SpawnRotation, SpawnLocation);
+	ACustomer* Customer = Cast<ACustomer>(UGameplayStatics::BeginDeferredActorSpawnFromClass(
+		this,
+		CustomerClass,
+		SpawnTransform
+	));
 
-	if (TableSubsystem)
-	{
-		ACustomerTable* Table = TableSubsystem->GetNotOccupiedTable();
-		if (Table)
-		{
-			Customer->SetTargetTable(Table);
-		}
-		else
-		{
-			Customer->Destroy();
-		}
-	}
-	
+	if (!Customer) return;
+
+	Customer->Init(Table, CashRegister);
+
+	UGameplayStatics::FinishSpawningActor(Customer, SpawnTransform);
 }
+

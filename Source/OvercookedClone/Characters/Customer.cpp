@@ -2,7 +2,8 @@
 
 
 #include "Characters/Customer.h"
-
+#include "Actors/CashRegister.h"
+#include "UObject/EnumProperty.h"
 
 ACustomer::ACustomer()
 {
@@ -10,9 +11,18 @@ ACustomer::ACustomer()
 
 }
 
-// TODO
+void ACustomer::Init(ACustomerTable* NewTable, ACashRegister* NewCashRegister)
+{
+	SetTargetTable(NewTable);
+	SetCashRegister(NewCashRegister);
+}
+
 FOrder ACustomer::GenerateOrder()
 {
-	return FOrder();
+	FOrder NewOrder;
+	NewOrder.CustomerTable = TargetTable;
+	UEnum* EnumPtr = StaticEnum<ERecipeType>();
+	NewOrder.RecipeType = static_cast<ERecipeType>(FMath::RandRange(0, EnumPtr->NumEnums() - 1));
+	CashRegister->AddOrder(NewOrder);
 }
 

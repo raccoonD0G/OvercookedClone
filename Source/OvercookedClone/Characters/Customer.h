@@ -16,12 +16,18 @@ public:
 	ACustomer();
 	
 public:
+	void Init(class ACustomerTable* NewTable, class ACashRegister* NewCashRegister);
+
 	UFUNCTION(BlueprintCallable)
 	FOrder GenerateOrder();
 
 	FORCEINLINE void SetTargetTable(class ACustomerTable* NewTable) { TargetTable = NewTable; }
+	FORCEINLINE void SetCashRegister(class ACashRegister* NewCashRegister) { CashRegister = NewCashRegister; }
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class ACustomerTable> TargetTable;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class ACashRegister> CashRegister;
 };

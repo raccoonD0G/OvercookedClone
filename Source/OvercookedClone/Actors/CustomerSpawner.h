@@ -23,5 +23,8 @@ private:
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<class ACustomer> CustomerClass;
 
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<class ACashRegister> CashRegister;
+
 	FTimerHandle SpawnTimerHandle;
 };
