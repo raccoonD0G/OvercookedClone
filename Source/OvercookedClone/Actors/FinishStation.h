@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Order.h"
+#include "Recipe.h"
 #include "FinishStation.generated.h"
 
 UCLASS()
@@ -26,4 +27,7 @@ public:
 
 private:
 	FOrder CurrentOrder;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "ture"))
+	TMap<ERecipeType, TSubclassOf<class AFood>> FoodClasses;
 };

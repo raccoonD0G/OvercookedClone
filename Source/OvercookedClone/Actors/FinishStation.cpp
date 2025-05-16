@@ -24,6 +24,6 @@ void AFinishStation::PostInitializeComponents()
 // TODO
 void AFinishStation::OnActorClicked(AActor* TouchedActor, FKey ButtonPressed)
 {
-	AFood* NewFood = GetWorld()->SpawnActor<AFood>();
+	AFood* NewFood = GetWorld()->SpawnActor<AFood>(FoodClasses[CurrentOrder.RecipeType]);
 	CurrentOrder.CustomerTable->PlaceFood(NewFood);
 }

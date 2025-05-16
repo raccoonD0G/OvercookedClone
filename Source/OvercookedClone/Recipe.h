@@ -66,14 +66,25 @@ enum class ERecipeType : uint8
 };
 
 USTRUCT(BlueprintType)
-struct FRecipeData
+struct FIngredientRequirement
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    EIngredientType Ingredient;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    EIngredientState RequiredState;
+};
+
+USTRUCT(BlueprintType)
+struct FRecipeData : public FTableRowBase
 {
     GENERATED_BODY()
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     ERecipeType RecipeType;
 
-    // 식재료와 그에 필요한 조리 상태 매핑
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    TMap<EIngredientType, EIngredientState> RequiredIngredients;
+    TArray<FIngredientRequirement> RequiredIngredients;
 };
