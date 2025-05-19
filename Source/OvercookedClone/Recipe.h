@@ -66,16 +66,29 @@ enum class ERecipeType : uint8
 };
 
 USTRUCT(BlueprintType)
-struct FIngredientRequirement
+struct FIngredientInfo
 {
     GENERATED_BODY()
+    
+    FIngredientInfo() : Ingredient(EIngredientType::None), RequiredState(EIngredientState::Raw) { }
+    FIngredientInfo(EIngredientType NewIngredient, EIngredientState NewRequiredState) : Ingredient(NewIngredient), RequiredState(NewRequiredState) { }
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     EIngredientType Ingredient;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     EIngredientState RequiredState;
+
+    bool operator==(const FIngredientInfo& Other) const
+    {
+        return Ingredient == Other.Ingredient && RequiredState == Other.RequiredState;
+    }
 };
+
+FORCEINLINE uint32 GetTypeHash(const FIngredientInfo& Info)
+{
+    return HashCombine(::GetTypeHash(Info.Ingredient), ::GetTypeHash(Info.RequiredState));
+}
 
 USTRUCT(BlueprintType)
 struct FRecipeData : public FTableRowBase
@@ -86,5 +99,5 @@ struct FRecipeData : public FTableRowBase
     ERecipeType RecipeType;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    TArray<FIngredientRequirement> RequiredIngredients;
+    TArray<FIngredientInfo> RequiredIngredients;
 };

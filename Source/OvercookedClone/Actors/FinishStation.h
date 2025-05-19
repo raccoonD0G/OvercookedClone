@@ -6,10 +6,11 @@
 #include "GameFramework/Actor.h"
 #include "Order.h"
 #include "Recipe.h"
+#include "Interfaces/InteractableInterface.h"
 #include "FinishStation.generated.h"
 
 UCLASS()
-class OVERCOOKEDCLONE_API AFinishStation : public AActor
+class OVERCOOKEDCLONE_API AFinishStation : public AActor, public IInteractableInterface
 {
 	GENERATED_BODY()
 	
@@ -26,8 +27,14 @@ public:
 	FORCEINLINE void SetCurrentOrder(FOrder NewOrder) { CurrentOrder = NewOrder; }
 
 private:
+	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
+	TSet<FIngredientInfo> Ingredients;
+
 	FOrder CurrentOrder;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "ture"))
 	TMap<ERecipeType, TSubclassOf<class AFood>> FoodClasses;
+
+public:
+	virtual void Interact_Implementation(AActor* Caller);
 };
