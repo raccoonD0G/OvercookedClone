@@ -8,7 +8,7 @@
 #include "FinishStationInteractInterface.generated.h"
 
 // This class does not need to be modified.
-UINTERFACE(MinimalAPI)
+UINTERFACE(MinimalAPI, BlueprintType)
 class UFinishStationInteractInterface : public UInterface
 {
 	GENERATED_BODY()
