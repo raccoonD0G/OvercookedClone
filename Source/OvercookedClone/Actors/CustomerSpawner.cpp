@@ -18,7 +18,7 @@ ACustomerSpawner::ACustomerSpawner()
 void ACustomerSpawner::BeginPlay()
 {
 	Super::BeginPlay();
-
+	SpawnCustomer();
 	// 20초에 한 번씩 반복 실행
 	GetWorld()->GetTimerManager().SetTimer(
 		SpawnTimerHandle,
