@@ -14,38 +14,153 @@
 		]
 	},
 	{
-		"Name": "Soup",
-		"RecipeType": "None",
-		"RequiredIngredients": []
+		"Name": "SoupRecipe",
+		"RecipeType": "Soup",
+		"RequiredIngredients": [
+			{
+				"Ingredient": "Onion",
+				"RequiredState": "Chopped"
+			},
+			{
+				"Ingredient": "Carrot",
+				"RequiredState": "Chopped"
+			},
+			{
+				"Ingredient": "Potato",
+				"RequiredState": "Boiled"
+			}
+		]
 	},
 	{
-		"Name": "Sushi",
-		"RecipeType": "None",
-		"RequiredIngredients": []
+		"Name": "SushiRecipe",
+		"RecipeType": "Sushi",
+		"RequiredIngredients": [
+			{
+				"Ingredient": "Rice",
+				"RequiredState": "Boiled"
+			},
+			{
+				"Ingredient": "Fish",
+				"RequiredState": "Raw"
+			},
+			{
+				"Ingredient": "Seaweed",
+				"RequiredState": "Raw"
+			}
+		]
 	},
 	{
-		"Name": "Hamburger",
-		"RecipeType": "None",
-		"RequiredIngredients": []
+		"Name": "HamburgerRecipe",
+		"RecipeType": "Hamburger",
+		"RequiredIngredients": [
+			{
+				"Ingredient": "BurgerBun",
+				"RequiredState": "Raw"
+			},
+			{
+				"Ingredient": "Beef",
+				"RequiredState": "Fried"
+			},
+			{
+				"Ingredient": "Cheese",
+				"RequiredState": "Raw"
+			},
+			{
+				"Ingredient": "Lettuce",
+				"RequiredState": "Chopped"
+			},
+			{
+				"Ingredient": "Tomato",
+				"RequiredState": "Chopped"
+			}
+		]
 	},
 	{
-		"Name": "Pizza",
-		"RecipeType": "None",
-		"RequiredIngredients": []
+		"Name": "PizzaRecipe",
+		"RecipeType": "Pizza",
+		"RequiredIngredients": [
+			{
+				"Ingredient": "Dough",
+				"RequiredState": "Raw"
+			},
+			{
+				"Ingredient": "TomatoSauce",
+				"RequiredState": "Raw"
+			},
+			{
+				"Ingredient": "Cheese",
+				"RequiredState": "Raw"
+			},
+			{
+				"Ingredient": "Mushroom",
+				"RequiredState": "Chopped"
+			},
+			{
+				"Ingredient": "Onion",
+				"RequiredState": "Chopped"
+			}
+		]
 	},
 	{
-		"Name": "Burrito",
-		"RecipeType": "None",
-		"RequiredIngredients": []
+		"Name": "BurritoRecipe",
+		"RecipeType": "Burrito",
+		"RequiredIngredients": [
+			{
+				"Ingredient": "Tortilla",
+				"RequiredState": "Raw"
+			},
+			{
+				"Ingredient": "Rice",
+				"RequiredState": "Boiled"
+			},
+			{
+				"Ingredient": "Chicken",
+				"RequiredState": "Fried"
+			},
+			{
+				"Ingredient": "Onion",
+				"RequiredState": "Chopped"
+			}
+		]
 	},
 	{
-		"Name": "FriedDish",
-		"RecipeType": "None",
-		"RequiredIngredients": []
+		"Name": "FriedDishRecipe",
+		"RecipeType": "FriedDish",
+		"RequiredIngredients": [
+			{
+				"Ingredient": "Shrimp",
+				"RequiredState": "Fried"
+			},
+			{
+				"Ingredient": "Flour",
+				"RequiredState": "Raw"
+			},
+			{
+				"Ingredient": "Egg",
+				"RequiredState": "Raw"
+			}
+		]
 	},
 	{
-		"Name": "Cake",
-		"RecipeType": "None",
-		"RequiredIngredients": []
+		"Name": "CakeRecipe",
+		"RecipeType": "Cake",
+		"RequiredIngredients": [
+			{
+				"Ingredient": "Flour",
+				"RequiredState": "Raw"
+			},
+			{
+				"Ingredient": "Egg",
+				"RequiredState": "Raw"
+			},
+			{
+				"Ingredient": "Carrot",
+				"RequiredState": "Chopped"
+			},
+			{
+				"Ingredient": "Dough",
+				"RequiredState": "Baked"
+			}
+		]
 	}
 ]

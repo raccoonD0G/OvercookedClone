@@ -20,6 +20,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Ingredient")
 	void ChangeIngredientState(EIngredientState NewIngredientState);
 
+	FORCEINLINE EIngredientType GetIngredientType() const { return IngredientType; }
+	FORCEINLINE EIngredientState GetIngredientState() const { return IngredientState; }
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<class UBoxComponent> BoxComponent;
