@@ -18,7 +18,8 @@ class OVERCOOKEDCLONE_API URecipeSubsystem : public UGameInstanceSubsystem
 public:
     virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 
-    const FRecipeData* GetRecipeByType(ERecipeType RecipeType) const;
+    UFUNCTION(BlueprintCallable)
+    const FRecipeData& GetRecipeByType(ERecipeType RecipeType) const;
 
 private:
     void LoadAllRecipes();

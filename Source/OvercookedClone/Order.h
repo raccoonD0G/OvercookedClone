@@ -10,9 +10,10 @@ struct FOrder
 	GENERATED_BODY()
 	
 public:
+	UPROPERTY(EditAnywhere)
 	ERecipeType RecipeType;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere)
 	TObjectPtr<class ACustomerTable> CustomerTable;
 
 };

@@ -6,11 +6,11 @@
 #include "GameFramework/Actor.h"
 #include "Order.h"
 #include "Recipe.h"
-#include "Interfaces/InteractableInterface.h"
+#include "Actors/InteractableBase.h"
 #include "FinishStation.generated.h"
 
 UCLASS()
-class OVERCOOKEDCLONE_API AFinishStation : public AActor, public IInteractableInterface
+class OVERCOOKEDCLONE_API AFinishStation : public AInteractableBase
 {
 	GENERATED_BODY()
 	
@@ -36,6 +36,5 @@ private:
 	TMap<ERecipeType, TSubclassOf<class AFood>> FoodClasses;
 
 public:
-	UFUNCTION()
-	virtual void Interact(AActor* Caller);
+	virtual void Interact(AActor* Caller) override;
 };

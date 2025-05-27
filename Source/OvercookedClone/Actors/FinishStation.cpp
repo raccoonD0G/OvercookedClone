@@ -29,7 +29,7 @@ void AFinishStation::OnActorClicked(AActor* TouchedActor, FKey ButtonPressed)
 
 	if (!RecipeSubsystem) return;
 
-	TArray<FIngredientInfo> IngredientRequirements = RecipeSubsystem->GetRecipeByType(CurrentOrder.RecipeType)->RequiredIngredients;
+	TArray<FIngredientInfo> IngredientRequirements = RecipeSubsystem->GetRecipeByType(CurrentOrder.RecipeType).RequiredIngredients;
 
 	if (IngredientRequirements.Num() != Ingredients.Num())
 	{

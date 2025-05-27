@@ -6,11 +6,11 @@
 #include "GameFramework/Actor.h"
 #include "Recipe.h"
 #include "Order.h"
-#include "Interfaces/InteractableInterface.h"
+#include "Actors/InteractableBase.h"
 #include "CashRegister.generated.h"
 
 UCLASS()
-class OVERCOOKEDCLONE_API ACashRegister : public AActor, public IInteractableInterface
+class OVERCOOKEDCLONE_API ACashRegister : public AInteractableBase
 {
 	GENERATED_BODY()
 	
@@ -18,7 +18,6 @@ public:
 	ACashRegister();	
 
 public:
-	UFUNCTION()
 	virtual void Interact(AActor* Caller) override;
 
 	void AddOrder(FOrder Order);
