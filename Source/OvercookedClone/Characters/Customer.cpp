@@ -24,7 +24,7 @@ void ACustomer::GenerateOrder()
 	FOrder NewOrder;
 	NewOrder.CustomerTable = TargetTable;
 	UEnum* EnumPtr = StaticEnum<ERecipeType>();
-	NewOrder.RecipeType = static_cast<ERecipeType>(FMath::RandRange(0, EnumPtr->NumEnums() - 1));
+	NewOrder.RecipeType = static_cast<ERecipeType>(FMath::RandRange(1, EnumPtr->NumEnums() - 1));
 	CashRegister->AddOrder(NewOrder);
 }
 

@@ -36,6 +36,8 @@ void ACustomerSpawner::SpawnCustomer()
 	UCustomerTableSubsystem* TableSubsystem = GetWorld()->GetSubsystem<UCustomerTableSubsystem>();
 	if (!TableSubsystem) return;
 
+	if (TableSubsystem->LeftSeatsNum() == 0) return; 
+
 	FVector SpawnLocation = FVector::ZeroVector;
 	FRotator SpawnRotation = FRotator::ZeroRotator;
 

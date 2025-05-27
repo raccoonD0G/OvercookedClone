@@ -21,6 +21,8 @@ void ACashRegister::Interact(AActor* Caller)
 
 	if (!FinishStation) return;
 
+	if (Orders.Num() == 0) return;
+
 	FinishStation->SetCurrentOrder(Orders[0]);
 	ITakeOrderInterface::Execute_SetCurrentRecipe(Caller, Orders[0].RecipeType);
 	DeleteOrder();

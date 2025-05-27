@@ -9,6 +9,10 @@
 #include "Actors/InteractableBase.h"
 #include "FinishStation.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnIngredientAddDelegate, class AIngredient*, NewIngredient);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnIngredientClearDelegate);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnOrderSetDelegate, const FOrder&, NewOrder);
+
 UCLASS()
 class OVERCOOKEDCLONE_API AFinishStation : public AInteractableBase
 {
@@ -19,12 +23,17 @@ public:
 
 protected:
 	virtual void PostInitializeComponents() override;
+	virtual void BeginPlay() override;
 	
 public:
 	UFUNCTION()
 	void OnActorClicked(AActor* TouchedActor, FKey ButtonPressed);
 
-	FORCEINLINE void SetCurrentOrder(FOrder NewOrder) { CurrentOrder = NewOrder; }
+	void SetCurrentOrder(FOrder NewOrder);
+
+	FOnIngredientAddDelegate OnIngredientAdd;
+	FOnIngredientClearDelegate OnIngredientClear;
+	FOnOrderSetDelegate OnOrderSet;
 
 private:
 	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))

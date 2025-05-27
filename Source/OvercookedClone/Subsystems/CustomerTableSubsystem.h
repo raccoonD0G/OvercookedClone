@@ -18,12 +18,8 @@ class OVERCOOKEDCLONE_API UCustomerTableSubsystem : public UWorldSubsystem
 protected:
 	virtual void OnWorldBeginPlay(UWorld& InWorld) override;
 
-private:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	TSet<TObjectPtr<class ACustomerTable>> NotOccupiedTables;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	TSet<TObjectPtr<class ACustomerTable>> OccupiedTables;
+public:
+	FORCEINLINE int32 LeftSeatsNum() const { return NotOccupiedTables.Num(); }
 
 public:
 	/// <summary>
@@ -38,5 +34,13 @@ public:
 	/// </summary>
 	/// <param name="TableOccupyInterface">Actor to unoccupy seat</param>
 	void UnoccupiedTable(class ITableOccupyInterface* TableOccupyInterface);
+
+private:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TSet<TObjectPtr<class ACustomerTable>> NotOccupiedTables;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TSet<TObjectPtr<class ACustomerTable>> OccupiedTables;
+
 
 };
