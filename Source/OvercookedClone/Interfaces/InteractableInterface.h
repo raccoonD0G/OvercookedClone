@@ -8,7 +8,7 @@
 #include "InteractableInterface.generated.h"
 
 // This class does not need to be modified.
-UINTERFACE(MinimalAPI, BlueprintType)
+UINTERFACE(MinimalAPI, NotBlueprintable)
 class UInteractableInterface : public UInterface
 {
 	GENERATED_BODY()
@@ -24,6 +24,6 @@ class OVERCOOKEDCLONE_API IInteractableInterface
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
-	void Interact(AActor* Caller);
+	UFUNCTION(BlueprintCallable)
+	virtual void Interact(AActor* Caller) = 0;
 };

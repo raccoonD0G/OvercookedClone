@@ -12,7 +12,7 @@ ACashRegister::ACashRegister()
 
 }
 
-void ACashRegister::Interact_Implementation(AActor* Caller)
+void ACashRegister::Interact(AActor* Caller)
 {
 	if (!Caller || !Caller->GetClass()->ImplementsInterface(UTakeOrderInterface::StaticClass()))
 	{

@@ -16,7 +16,7 @@ public:
 	ARefrigerator();
 
 public:
-	virtual void Interact_Implementation(AActor* Caller) override;
+	virtual void Interact(AActor* Caller) override;
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))

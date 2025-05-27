@@ -27,14 +27,15 @@ AAppliance::AAppliance()
 	TextComponent->SetWorldSize(50.f);
 }
 
-void AAppliance::Interact_Implementation(AActor* Caller)
+void AAppliance::Interact(AActor* Caller)
 {
-	if (!Caller || !Caller->GetClass()->ImplementsInterface(UChangeIngredientStateInterface::StaticClass()))
+	IChangeIngredientStateInterface* ChangeIngredientStateInterface = Cast<IChangeIngredientStateInterface>(Caller);
+	if (!ChangeIngredientStateInterface)
 	{
 		return;
 	}
 
-	IChangeIngredientStateInterface::Execute_ChangeIngredientState(Caller, OutIngredientState);
+	ChangeIngredientStateInterface->ChangeIngredientState(OutIngredientState);
 	
 }
 

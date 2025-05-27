@@ -11,9 +11,8 @@ ACustomer::ACustomer()
 
 }
 
-void ACustomer::Init(ACustomerTable* NewTable, ACashRegister* NewCashRegister)
+void ACustomer::Init(ACashRegister* NewCashRegister)
 {
-	SetTargetTable(NewTable);
 	SetCashRegister(NewCashRegister);
 }
 
@@ -24,5 +23,15 @@ void ACustomer::GenerateOrder()
 	UEnum* EnumPtr = StaticEnum<ERecipeType>();
 	NewOrder.RecipeType = static_cast<ERecipeType>(FMath::RandRange(0, EnumPtr->NumEnums() - 1));
 	CashRegister->AddOrder(NewOrder);
+}
+
+void ACustomer::OccupyTable(ACustomerTable* Table)
+{
+	SetTargetTable(Table);
+}
+
+ACustomerTable* ACustomer::OccupiedTable() const
+{
+	return GetTargetTable();
 }
 

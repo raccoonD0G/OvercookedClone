@@ -9,4 +9,6 @@ AInteractableBase::AInteractableBase()
 
 }
 
-
+void AInteractableBase::Interact(AActor* Caller)
+{
+}

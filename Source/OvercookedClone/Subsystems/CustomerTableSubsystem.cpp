@@ -3,6 +3,7 @@
 
 #include "Subsystems/CustomerTableSubsystem.h"
 #include "Actors/CustomerTable.h"
+#include "Interfaces/TableOccupyInterface.h"
 #include "EngineUtils.h"
 
 void UCustomerTableSubsystem::OnWorldBeginPlay(UWorld& InWorld)
@@ -20,11 +21,11 @@ void UCustomerTableSubsystem::OnWorldBeginPlay(UWorld& InWorld)
 	}
 }
 
-ACustomerTable* UCustomerTableSubsystem::GetNotOccupiedTable()
+bool UCustomerTableSubsystem::OccupyTable(ITableOccupyInterface* TableOccupyInterface)
 {
 	if (NotOccupiedTables.Num() == 0)
 	{
-		return nullptr;
+		return false;
 	}
 
 	// TSet을 배열로 변환하여 인덱스로 접근
@@ -37,5 +38,13 @@ ACustomerTable* UCustomerTableSubsystem::GetNotOccupiedTable()
 	NotOccupiedTables.Remove(ChosenTable);
 	OccupiedTables.Add(ChosenTable);
 
-	return ChosenTable;
+	TableOccupyInterface->OccupyTable(ChosenTable);
+
+	return true;
+}
+
+void UCustomerTableSubsystem::UnoccupiedTable(TScriptInterface<class ITableOccupyInterface> TableOccupyInterface)
+{
+	OccupiedTables.Remove(TableOccupyInterface->OccupiedTable());
+	NotOccupiedTables.Add(TableOccupyInterface->OccupiedTable());
 }

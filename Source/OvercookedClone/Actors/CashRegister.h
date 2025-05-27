@@ -18,7 +18,8 @@ public:
 	ACashRegister();	
 
 public:
-	virtual void Interact_Implementation(AActor* Caller) override;
+	UFUNCTION()
+	virtual void Interact(AActor* Caller) override;
 
 	void AddOrder(FOrder Order);
 	void DeleteOrder();

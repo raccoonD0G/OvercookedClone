@@ -27,6 +27,6 @@ private:
 	EIngredientState OutIngredientState;
 
 public:
-	virtual void Interact_Implementation(AActor* Caller) override;
+	virtual void Interact(AActor* Caller) override;
 
 };

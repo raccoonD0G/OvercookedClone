@@ -12,7 +12,7 @@ ARefrigerator::ARefrigerator()
 
 }
 
-void ARefrigerator::Interact_Implementation(AActor* Caller)
+void ARefrigerator::Interact(AActor* Caller)
 {
 	if (!Caller || !Caller->GetClass()->ImplementsInterface(URefrigeratorInteractInterface::StaticClass()))
 	{
@@ -41,7 +41,7 @@ void ARefrigerator::Interact_Implementation(AActor* Caller)
 	check(SelectedIngredientActor);
 
 	// ObtainIngredients »£√‚
-	IRefrigeratorInteractInterface::Execute_ObtainIngredients(Caller, this, SelectedIngredientActor);
+	IRefrigeratorInteractInterface::Execute_ObtainIngredients(Caller, SelectedIngredientActor);
 }
 
 

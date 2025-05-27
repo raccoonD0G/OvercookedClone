@@ -56,14 +56,15 @@ void AFinishStation::OnActorClicked(AActor* TouchedActor, FKey ButtonPressed)
 	}
 }
 
-void AFinishStation::Interact_Implementation(AActor* Caller)
+void AFinishStation::Interact(AActor* Caller)
 {
-	if (!Caller || !Caller->GetClass()->ImplementsInterface(UFinishStationInteractInterface::StaticClass()))
+	IFinishStationInteractInterface* FinishStationInteractInterface = Cast<IFinishStationInteractInterface>(Caller);
+	if (!FinishStationInteractInterface)
 	{
 		return;
 	}
 
-	AIngredient* Ingredient = IFinishStationInteractInterface::Execute_PutOutIngredient(Caller, this);
+	AIngredient* Ingredient = FinishStationInteractInterface->PutOutIngredient();
 
 	if (!Ingredient) return;
 
@@ -71,5 +72,4 @@ void AFinishStation::Interact_Implementation(AActor* Caller)
 
 	Ingredient->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 	Ingredient->AttachToActor(this, FAttachmentTransformRules::KeepWorldTransform);
-
 }

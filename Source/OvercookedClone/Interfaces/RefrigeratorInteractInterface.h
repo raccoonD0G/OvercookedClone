@@ -23,9 +23,9 @@ class OVERCOOKEDCLONE_API IRefrigeratorInteractInterface
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
-	void ObtainIngredients(AActor* Caller, class AIngredient* SelectedIngredient);
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void ObtainIngredients(class AIngredient* SelectedIngredient);
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	const TArray<EIngredientType> GetNecessaryIngredients();
 };

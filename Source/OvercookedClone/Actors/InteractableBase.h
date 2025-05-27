@@ -7,11 +7,14 @@
 #include "Interfaces/InteractableInterface.h"
 #include "InteractableBase.generated.h"
 
-UCLASS(Blueprintable, BlueprintType)
+UCLASS(Abstract, BlueprintType)
 class OVERCOOKEDCLONE_API AInteractableBase : public AActor, public IInteractableInterface
 {
 	GENERATED_BODY()
 	
 public:
 	AInteractableBase();
+
+	UFUNCTION()
+	virtual void Interact(AActor* Caller) override;
 };

@@ -13,18 +13,18 @@
 ACustomerSpawner::ACustomerSpawner()
 {
 	PrimaryActorTick.bCanEverTick = false;
+	SpawnInterval = 7.0f;
 }
 
 void ACustomerSpawner::BeginPlay()
 {
 	Super::BeginPlay();
 	SpawnCustomer();
-	// 20초에 한 번씩 반복 실행
 	GetWorld()->GetTimerManager().SetTimer(
 		SpawnTimerHandle,
 		this,
 		&ACustomerSpawner::SpawnCustomer,
-		20.0f,
+		SpawnInterval,
 		true
 	);
 }
@@ -35,9 +35,6 @@ void ACustomerSpawner::SpawnCustomer()
 
 	UCustomerTableSubsystem* TableSubsystem = GetWorld()->GetSubsystem<UCustomerTableSubsystem>();
 	if (!TableSubsystem) return;
-
-	ACustomerTable* Table = TableSubsystem->GetNotOccupiedTable();
-	if (!Table) return;
 
 	FVector SpawnLocation = FVector::ZeroVector;
 	FRotator SpawnRotation = FRotator::ZeroRotator;
@@ -51,7 +48,8 @@ void ACustomerSpawner::SpawnCustomer()
 
 	if (!Customer) return;
 
-	Customer->Init(Table, CashRegister);
+	TableSubsystem->OccupyTable(Customer);
+	Customer->Init(CashRegister);
 
 	UGameplayStatics::FinishSpawningActor(Customer, SpawnTransform);
 }

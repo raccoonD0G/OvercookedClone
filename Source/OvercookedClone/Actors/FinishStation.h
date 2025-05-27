@@ -36,5 +36,6 @@ private:
 	TMap<ERecipeType, TSubclassOf<class AFood>> FoodClasses;
 
 public:
-	virtual void Interact_Implementation(AActor* Caller);
+	UFUNCTION()
+	virtual void Interact(AActor* Caller);
 };

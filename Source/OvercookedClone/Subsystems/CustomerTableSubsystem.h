@@ -14,7 +14,7 @@ UCLASS()
 class OVERCOOKEDCLONE_API UCustomerTableSubsystem : public UWorldSubsystem
 {
 	GENERATED_BODY()
-	
+
 protected:
 	virtual void OnWorldBeginPlay(UWorld& InWorld) override;
 
@@ -26,5 +26,18 @@ private:
 	TSet<TObjectPtr<class ACustomerTable>> OccupiedTables;
 
 public:
-	class ACustomerTable* GetNotOccupiedTable();
+	/// <summary>
+	/// Sit on NotOccupiedTable
+	/// </summary>
+	/// <param name="TableOccupyInterface">Actor to occupy seat</param>
+	/// <returns>Return false if all seats occupied</returns>
+	bool OccupyTable(class ITableOccupyInterface* TableOccupyInterface);
+
+	/// <summary>
+	/// Unoccupy Table
+	/// </summary>
+	/// <param name="TableOccupyInterface">Actor to unoccupy seat</param>
+	UFUNCTION(BlueprintCallable)
+	void UnoccupiedTable(TScriptInterface<class ITableOccupyInterface> TableOccupyInterface);
+
 };

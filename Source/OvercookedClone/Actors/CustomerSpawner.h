@@ -27,4 +27,8 @@ private:
 	TObjectPtr<class ACashRegister> CashRegister;
 
 	FTimerHandle SpawnTimerHandle;
+
+private:
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
+	float SpawnInterval;
 };
