@@ -58,13 +58,12 @@ void AFinishStation::OnActorClicked(AActor* TouchedActor, FKey ButtonPressed)
 
 void AFinishStation::Interact(AActor* Caller)
 {
-	IFinishStationInteractInterface* FinishStationInteractInterface = Cast<IFinishStationInteractInterface>(Caller);
-	if (!FinishStationInteractInterface)
+	if (!Caller || !Caller->GetClass()->ImplementsInterface(UFinishStationInteractInterface::StaticClass()))
 	{
 		return;
 	}
 
-	AIngredient* Ingredient = FinishStationInteractInterface->PutOutIngredient();
+	AIngredient* Ingredient = IFinishStationInteractInterface::Execute_PutOutIngredient(Caller);
 
 	if (!Ingredient) return;
 
