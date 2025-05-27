@@ -45,6 +45,8 @@ void ACustomer::EndMoveToCachRegister()
 	ACustomerState* CustomerState = Cast<ACustomerState>(StateAIController->GetAIState());
 	check(CustomerState);
 
+	GenerateOrder();
+
 	CustomerState->SetCurrentState(ECustomerState::MoveToTable);
 }
 

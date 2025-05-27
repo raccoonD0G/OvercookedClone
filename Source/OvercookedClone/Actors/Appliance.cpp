@@ -29,14 +29,8 @@ AAppliance::AAppliance()
 
 void AAppliance::Interact(AActor* Caller)
 {
-	IChangeIngredientStateInterface* ChangeIngredientStateInterface = Cast<IChangeIngredientStateInterface>(Caller);
-	if (!ChangeIngredientStateInterface)
+	if (Caller && Caller->GetClass()->ImplementsInterface(UChangeIngredientStateInterface::StaticClass()))
 	{
-		return;
+		IChangeIngredientStateInterface::Execute_ChangeIngredientState(Caller, OutIngredientState);
 	}
-
-	ChangeIngredientStateInterface->ChangeIngredientState(OutIngredientState);
-	
 }
-
-

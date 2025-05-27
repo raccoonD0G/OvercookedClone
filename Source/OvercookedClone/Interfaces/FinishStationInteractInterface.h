@@ -8,7 +8,7 @@
 #include "FinishStationInteractInterface.generated.h"
 
 // This class does not need to be modified.
-UINTERFACE(MinimalAPI, NotBlueprintable)
+UINTERFACE(MinimalAPI)
 class UFinishStationInteractInterface : public UInterface
 {
 	GENERATED_BODY()
@@ -23,6 +23,6 @@ class OVERCOOKEDCLONE_API IFinishStationInteractInterface
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	UFUNCTION(BlueprintCallable)
-	virtual class AIngredient* PutOutIngredient() = 0;
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	class AIngredient* PutOutIngredient();
 };
