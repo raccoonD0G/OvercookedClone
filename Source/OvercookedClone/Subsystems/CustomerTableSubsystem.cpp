@@ -43,7 +43,7 @@ bool UCustomerTableSubsystem::OccupyTable(ITableOccupyInterface* TableOccupyInte
 	return true;
 }
 
-void UCustomerTableSubsystem::UnoccupiedTable(TScriptInterface<class ITableOccupyInterface> TableOccupyInterface)
+void UCustomerTableSubsystem::UnoccupiedTable(ITableOccupyInterface* TableOccupyInterface)
 {
 	OccupiedTables.Remove(TableOccupyInterface->OccupiedTable());
 	NotOccupiedTables.Add(TableOccupyInterface->OccupiedTable());

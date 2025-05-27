@@ -4,6 +4,9 @@
 #include "Characters/Customer.h"
 #include "Actors/CashRegister.h"
 #include "UObject/EnumProperty.h"
+#include "Subsystems/CustomerTableSubsystem.h"
+#include "AIController/StateAIController.h"
+#include "AIStates/CustomerState.h"
 
 ACustomer::ACustomer()
 {
@@ -33,5 +36,42 @@ void ACustomer::OccupyTable(ACustomerTable* Table)
 ACustomerTable* ACustomer::OccupiedTable() const
 {
 	return GetTargetTable();
+}
+
+void ACustomer::EndMoveToCachRegister()
+{
+	AStateAIController* StateAIController = Cast<AStateAIController>(GetController());
+	check(StateAIController);
+	ACustomerState* CustomerState = Cast<ACustomerState>(StateAIController->GetAIState());
+	check(CustomerState);
+
+	CustomerState->SetCurrentState(ECustomerState::MoveToTable);
+}
+
+void ACustomer::EndMoveToTable()
+{
+	AStateAIController* StateAIController = Cast<AStateAIController>(GetController());
+	check(StateAIController);
+	ACustomerState* CustomerState = Cast<ACustomerState>(StateAIController->GetAIState());
+	check(CustomerState);
+
+	CustomerState->SetCurrentState(ECustomerState::Eating);
+}
+
+void ACustomer::EndEating()
+{
+	AStateAIController* StateAIController = Cast<AStateAIController>(GetController());
+	check(StateAIController);
+	ACustomerState* CustomerState = Cast<ACustomerState>(StateAIController->GetAIState());
+	check(CustomerState);
+
+	CustomerState->SetCurrentState(ECustomerState::Exiting);
+}
+
+void ACustomer::EndExiting()
+{
+	UCustomerTableSubsystem* CustomerTableSubsystem = GetWorld()->GetSubsystem<UCustomerTableSubsystem>();
+	CustomerTableSubsystem->UnoccupiedTable(this);
+	GetWorld()->DestroyActor(this);
 }
 

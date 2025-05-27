@@ -39,6 +39,16 @@ void AStateAIController::OnPossess(APawn* InPawn)
 	}
 }
 
+void AStateAIController::BeginDestroy()
+{
+	Super::BeginDestroy();
+	if (AIState)
+	{
+		GetWorld()->DestroyActor(AIState);
+		AIState = nullptr;
+	}
+}
+
 void AStateAIController::RunAI()
 {
 	UBlackboardComponent* BlackboardPtr = Blackboard.Get();

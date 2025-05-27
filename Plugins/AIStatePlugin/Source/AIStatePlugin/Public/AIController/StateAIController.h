@@ -20,6 +20,7 @@ public:
 protected:
 	virtual void PostInitializeComponents() override;
 	virtual void OnPossess(APawn* InPawn) override;
+	virtual void BeginDestroy() override;
 
 // BT Section
 private:

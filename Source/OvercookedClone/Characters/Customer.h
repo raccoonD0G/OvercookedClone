@@ -6,10 +6,14 @@
 #include "GameFramework/Character.h"
 #include "Order.h"
 #include "Interfaces/TableOccupyInterface.h"
+#include "Interfaces/MoveToCachRegisterInterface.h"
+#include "Interfaces/MoveToTableInterface.h"
+#include "Interfaces/EatInterface.h"
+#include "Interfaces/ExitInterface.h"
 #include "Customer.generated.h"
 
 UCLASS()
-class OVERCOOKEDCLONE_API ACustomer : public ACharacter, public ITableOccupyInterface
+class OVERCOOKEDCLONE_API ACustomer : public ACharacter, public ITableOccupyInterface, public IMoveToCachRegisterInterface, public IMoveToTableInterface, public IEatInterface, public IExitInterface
 {
 	GENERATED_BODY()
 
@@ -41,4 +45,11 @@ public:
 	virtual void OccupyTable(class ACustomerTable* Table) override;
 
 	virtual class ACustomerTable* OccupiedTable() const override;
+
+
+public:
+	virtual void EndMoveToCachRegister() override;
+	virtual void EndMoveToTable() override;
+	virtual void EndEating() override;
+	virtual void EndExiting() override;
 };

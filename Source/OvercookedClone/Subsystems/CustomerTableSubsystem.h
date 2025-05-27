@@ -37,7 +37,6 @@ public:
 	/// Unoccupy Table
 	/// </summary>
 	/// <param name="TableOccupyInterface">Actor to unoccupy seat</param>
-	UFUNCTION(BlueprintCallable)
-	void UnoccupiedTable(TScriptInterface<class ITableOccupyInterface> TableOccupyInterface);
+	void UnoccupiedTable(class ITableOccupyInterface* TableOccupyInterface);
 
 };
