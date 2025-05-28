@@ -8,6 +8,7 @@
 #include "AIController/StateAIController.h"
 #include "AIStates/CustomerState.h"
 #include "Actors/CustomerTable.h"
+#include "GameStates/KitchenGameState.h"
 
 ACustomer::ACustomer()
 {
@@ -49,6 +50,23 @@ void ACustomer::EndMoveToCachRegister()
 
 	GenerateOrder();
 
+	UCustomerTableSubsystem* TableSubsystem = GetWorld()->GetSubsystem<UCustomerTableSubsystem>();
+	check(TableSubsystem);
+
+	if (TableSubsystem->LeftSeatsNum() == 0)
+	{
+		AKitchenGameState* KitchenGameState = GetWorld()->GetGameState<AKitchenGameState>();
+		if (KitchenGameState)
+		{
+			KitchenGameState->SetIsSeatsFullTrue();
+		}
+
+		CustomerState->SetCurrentState(ECustomerState::Exiting);
+		return;
+	}
+
+	TableSubsystem->OccupyTable(this);
+
 	CustomerState->SetCurrentState(ECustomerState::MoveToTable);
 }
 
@@ -79,14 +97,25 @@ void ACustomer::EndEating()
 	check(StateAIController);
 	ACustomerState* CustomerState = Cast<ACustomerState>(StateAIController->GetAIState());
 	check(CustomerState);
+	UCustomerTableSubsystem* CustomerTableSubsystem = GetWorld()->GetSubsystem<UCustomerTableSubsystem>();
+	check(CustomerTableSubsystem);
+
+	CustomerTableSubsystem->UnoccupiedTable(this);
+
+	AKitchenGameState* KitchenGameState = GetWorld()->GetGameState<AKitchenGameState>();
+	if (KitchenGameState)
+	{
+		if (KitchenGameState->GetIsSeatsFull())
+		{
+			KitchenGameState->SetIsSeatsFullFalse();
+		}
+	}
 
 	CustomerState->SetCurrentState(ECustomerState::Exiting);
 }
 
 void ACustomer::EndExiting()
 {
-	UCustomerTableSubsystem* CustomerTableSubsystem = GetWorld()->GetSubsystem<UCustomerTableSubsystem>();
-	CustomerTableSubsystem->UnoccupiedTable(this);
 	GetWorld()->DestroyActor(this);
 }
 

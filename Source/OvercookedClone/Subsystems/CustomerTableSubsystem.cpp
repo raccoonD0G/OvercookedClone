@@ -5,6 +5,7 @@
 #include "Actors/CustomerTable.h"
 #include "Interfaces/TableOccupyInterface.h"
 #include "EngineUtils.h"
+#include "GameStates/KitchenGameState.h"
 
 void UCustomerTableSubsystem::OnWorldBeginPlay(UWorld& InWorld)
 {

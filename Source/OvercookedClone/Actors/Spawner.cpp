@@ -9,9 +9,9 @@ ASpawner::ASpawner()
 {
 	PrimaryActorTick.bCanEverTick = true;
 	SpawnInterval = 7.0f;
-	SpawnCenterLocation = FVector::ZeroVector;
-	SpawnCenterRotation = FRotator::ZeroRotator;
-
+	SpawnLocation = FVector::ZeroVector;
+	SpawnRotation = FRotator::ZeroRotator;
+	MaxSpawnedActorCount = 3;
 }
 
 // Called when the game starts or when spawned
@@ -32,16 +32,28 @@ void ASpawner::BeginPlay()
 
 void ASpawner::SpawnActor()
 {
-	AActor* SpawnedActor = SpawnActorDeffered();
-	FTransform SpawnTransform(SpawnRotation, SpawnLocation);
-	UGameplayStatics::FinishSpawningActor(SpawnedActor, SpawnTransform);
+	if (SpawnedActorCount < MaxSpawnedActorCount)
+	{
+		AActor* SpawnedActor = SpawnActorDeffered();
+		if (!SpawnedActor) return;
+
+		FTransform SpawnTransform(SpawnRotation, SpawnLocation);
+		UGameplayStatics::FinishSpawningActor(SpawnedActor, SpawnTransform);
+		SpawnedActor->OnDestroyed.AddDynamic(this, &ASpawner::DecreaseSpawnedActorCount);
+		SpawnedActorCount++;
+	}
+}
+
+void ASpawner::DecreaseSpawnedActorCount(AActor* DestroyedActor)
+{
+	SpawnedActorCount--;
 }
 
 AActor* ASpawner::SpawnActorDeffered()
 {
 	if (!ActorClass) return nullptr;
 
-	FTransform SpawnTransform(SpawnCenterRotation, SpawnCenterLocation);
+	FTransform SpawnTransform(SpawnRotation, SpawnLocation);
 	AActor* SpawnedActor = Cast<AActor>(UGameplayStatics::BeginDeferredActorSpawnFromClass(
 		this,
 		ActorClass,

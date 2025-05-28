@@ -29,15 +29,19 @@ protected:
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<class AActor> ActorClass;
 
+private:
+	UFUNCTION()
+	void DecreaseSpawnedActorCount(AActor* DestroyedActor);
+
 protected:
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 	float SpawnInterval;
 
-	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
-	FVector SpawnCenterLocation;
+	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
+	int32 SpawnedActorCount;
 
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
-	FRotator SpawnCenterRotation;
+	int32 MaxSpawnedActorCount;
 
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 	FVector SpawnLocation;

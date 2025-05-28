@@ -14,7 +14,4 @@ class OVERCOOKEDCLONE_API AKitchenGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 	
-	
-	
-	
 };

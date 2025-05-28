@@ -20,7 +20,7 @@ class OVERCOOKEDCLONE_API ACustomer : public ACharacter, public ITableOccupyInte
 
 public:
 	ACustomer();
-	
+
 public:
 	void Init(class ACashRegister* NewCashRegister);
 

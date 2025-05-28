@@ -25,4 +25,10 @@ private:
 
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 	float SpawnRadius;
+
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
+	FVector SpawnCenterLocation;
+
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
+	FRotator SpawnCenterRotation;
 };

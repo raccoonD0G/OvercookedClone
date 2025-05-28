@@ -20,19 +20,6 @@ AActor* ACustomerSpawner::SpawnActorDeffered()
 {
 	AActor* SpawnedActor = Super::SpawnActorDeffered();
 
-	UCustomerTableSubsystem* TableSubsystem = GetWorld()->GetSubsystem<UCustomerTableSubsystem>();
-	if (!TableSubsystem)
-	{
-		GetWorld()->DestroyActor(SpawnedActor);
-		return nullptr;
-	}
-
-	if (TableSubsystem->LeftSeatsNum() == 0)
-	{
-		GetWorld()->DestroyActor(SpawnedActor);
-		return nullptr;
-	}
-
 	if (!SpawnedActor) return nullptr;
 
 	ACustomer* Customer = Cast<ACustomer>(SpawnedActor);
@@ -43,7 +30,6 @@ AActor* ACustomerSpawner::SpawnActorDeffered()
 		return nullptr;
 	}
 
-	TableSubsystem->OccupyTable(Customer);
 	Customer->Init(CashRegister);
 
 	return Customer;
