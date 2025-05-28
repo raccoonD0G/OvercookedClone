@@ -7,6 +7,8 @@
 #include "Recipe.h"
 #include "CustomerTable.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnFoodPlacedDelegate);
+
 UCLASS()
 class OVERCOOKEDCLONE_API ACustomerTable : public AActor
 {
@@ -19,6 +21,7 @@ public:
 	void PlaceFood(class AFood* Food);
 	void ClearFood();
 
+	FOnFoodPlacedDelegate OnFoodPlaced;
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class AFood> FoodOnTable;

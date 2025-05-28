@@ -7,6 +7,7 @@
 #include "Subsystems/CustomerTableSubsystem.h"
 #include "AIController/StateAIController.h"
 #include "AIStates/CustomerState.h"
+#include "Actors/CustomerTable.h"
 
 ACustomer::ACustomer()
 {
@@ -31,6 +32,7 @@ void ACustomer::GenerateOrder()
 void ACustomer::OccupyTable(ACustomerTable* Table)
 {
 	SetTargetTable(Table);
+	TargetTable->OnFoodPlaced.AddDynamic(this, &ACustomer::EndWaitingForFood);
 }
 
 ACustomerTable* ACustomer::OccupiedTable() const
@@ -57,8 +59,19 @@ void ACustomer::EndMoveToTable()
 	ACustomerState* CustomerState = Cast<ACustomerState>(StateAIController->GetAIState());
 	check(CustomerState);
 
+	CustomerState->SetCurrentState(ECustomerState::WaitForFood);
+}
+
+void ACustomer::EndWaitingForFood()
+{
+	AStateAIController* StateAIController = Cast<AStateAIController>(GetController());
+	check(StateAIController);
+	ACustomerState* CustomerState = Cast<ACustomerState>(StateAIController->GetAIState());
+	check(CustomerState);
+
 	CustomerState->SetCurrentState(ECustomerState::Eating);
 }
+
 
 void ACustomer::EndEating()
 {

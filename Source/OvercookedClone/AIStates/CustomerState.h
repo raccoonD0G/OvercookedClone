@@ -12,6 +12,7 @@ enum class ECustomerState : uint8
 	None,
 	MoveToRegister,
 	MoveToTable,
+	WaitForFood,
 	Eating,
 	Exiting
 };

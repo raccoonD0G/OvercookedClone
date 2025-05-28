@@ -15,6 +15,7 @@ void ACustomerTable::PlaceFood(AFood* Food)
 {
 	FoodOnTable = Food;
 	FoodOnTable->SetActorLocation(GetActorLocation());
+	OnFoodPlaced.Broadcast();
 }
 
 void ACustomerTable::ClearFood()
