@@ -3,11 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "Actors/Spawner.h"
 #include "CustomerSpawner.generated.h"
 
 UCLASS()
-class OVERCOOKEDCLONE_API ACustomerSpawner : public AActor
+class OVERCOOKEDCLONE_API ACustomerSpawner : public ASpawner
 {
 	GENERATED_BODY()
 	
@@ -15,20 +15,9 @@ public:
 	ACustomerSpawner();
 
 protected:
-	virtual void BeginPlay() override;
+	virtual AActor* SpawnActorDeffered() override;
 
 private:
-	void SpawnCustomer();
-
-	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<class ACustomer> CustomerClass;
-
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<class ACashRegister> CashRegister;
-
-	FTimerHandle SpawnTimerHandle;
-
-private:
-	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
-	float SpawnInterval;
 };
