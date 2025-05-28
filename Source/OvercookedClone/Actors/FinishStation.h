@@ -9,8 +9,7 @@
 #include "Actors/InteractableBase.h"
 #include "FinishStation.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnIngredientAddDelegate, class AIngredient*, NewIngredient);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnIngredientClearDelegate);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnIngredientInfosChangeDelegate, const TArray<FIngredientInfo>&, IngredientInfos);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnOrderSetDelegate, const FOrder&, NewOrder);
 
 UCLASS()
@@ -22,28 +21,38 @@ public:
 	AFinishStation();
 
 protected:
-	virtual void PostInitializeComponents() override;
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	virtual void BeginPlay() override;
 	
 public:
-	UFUNCTION()
-	void OnActorClicked(AActor* TouchedActor, FKey ButtonPressed);
+	UFUNCTION(BlueprintCallable)
+	void OnClicked();
 
+	UFUNCTION(BlueprintCallable)
 	void SetCurrentOrder(FOrder NewOrder);
 
-	FOnIngredientAddDelegate OnIngredientAdd;
-	FOnIngredientClearDelegate OnIngredientClear;
+	FOnIngredientInfosChangeDelegate OnIngredientInfosChange;
 	FOnOrderSetDelegate OnOrderSet;
 
-private:
-	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
-	TSet<FIngredientInfo> Ingredients;
+	UFUNCTION(BlueprintCallable)
+	void AddIngredientInfo(FIngredientInfo IngredientInfo);
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+private:
+	UPROPERTY(ReplicatedUsing = OnRep_Ingredients, VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
+	TArray<FIngredientInfo> IngredientInfos;
+
+	UPROPERTY(ReplicatedUsing = OnRep_CurrentOrder, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	FOrder CurrentOrder;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "ture"))
 	TMap<ERecipeType, TSubclassOf<class AFood>> FoodClasses;
+
+private:
+	UFUNCTION()
+	void OnRep_CurrentOrder();
+
+	UFUNCTION()
+	void OnRep_Ingredients();
 
 public:
 	virtual void Interact(AActor* Caller) override;

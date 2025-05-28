@@ -17,14 +17,20 @@ class OVERCOOKEDCLONE_API ACashRegister : public AInteractableBase
 public:	
 	ACashRegister();	
 
+protected:
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
 public:
 	virtual void Interact(AActor* Caller) override;
 
+	UFUNCTION(BlueprintCallable)
 	void AddOrder(FOrder Order);
+
+	UFUNCTION(BlueprintCallable)
 	void DeleteOrder();
 
 private:
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	TArray<FOrder> Orders;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))

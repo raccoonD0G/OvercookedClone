@@ -4,6 +4,7 @@
 #include "Actors/Ingredient.h"
 #include "Components/BoxComponent.h"
 #include "Components/TextRenderComponent.h"
+#include "Net/UnrealNetwork.h"
 
 AIngredient::AIngredient()
 {
@@ -25,9 +26,18 @@ AIngredient::AIngredient()
     TextComponent->SetRelativeLocation(FVector(0.f, 0.f, 50.f));
     TextComponent->SetHorizontalAlignment(EHorizTextAligment::EHTA_Center);
     TextComponent->SetWorldSize(50.f);
+
+    bReplicates = true;
 }
 
-void AIngredient::ChangeIngredientState(EIngredientState NewIngredientState)
+void AIngredient::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+    Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+    DOREPLIFETIME(AIngredient, IngredientState);
+}
+
+void AIngredient::Server_ChangeIngredientState_Implementation(EIngredientState NewIngredientState)
 {
     if (IngredientState != EIngredientState::Raw) return;
     IngredientState = NewIngredientState;

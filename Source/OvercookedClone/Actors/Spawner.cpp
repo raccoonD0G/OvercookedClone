@@ -14,20 +14,21 @@ ASpawner::ASpawner()
 	MaxSpawnedActorCount = 3;
 }
 
-// Called when the game starts or when spawned
 void ASpawner::BeginPlay()
 {
 	Super::BeginPlay();
 
-	SpawnActor();
-	GetWorld()->GetTimerManager().SetTimer(
-		SpawnTimerHandle,
-		this,
-		&ASpawner::SpawnActor,
-		SpawnInterval,
-		true
-	);
-	
+	if (HasAuthority())
+	{
+		SpawnActor();
+		GetWorld()->GetTimerManager().SetTimer(
+			SpawnTimerHandle,
+			this,
+			&ASpawner::SpawnActor,
+			SpawnInterval,
+			true
+		);
+	}
 }
 
 void ASpawner::SpawnActor()

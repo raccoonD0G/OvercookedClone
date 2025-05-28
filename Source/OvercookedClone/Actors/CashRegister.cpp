@@ -4,16 +4,27 @@
 #include "Actors/CashRegister.h"
 #include "Interfaces/TakeOrderInterface.h"
 #include "Actors/FinishStation.h"
+#include "Net/UnrealNetwork.h"
 
 
 ACashRegister::ACashRegister()
 {
 	PrimaryActorTick.bCanEverTick = true;
+	bReplicates = true;
 
+}
+
+void ACashRegister::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ACashRegister, Orders);
 }
 
 void ACashRegister::Interact(AActor* Caller)
 {
+	Super::Interact(Caller);
+
 	if (!Caller || !Caller->GetClass()->ImplementsInterface(UTakeOrderInterface::StaticClass()))
 	{
 		return;
@@ -23,17 +34,21 @@ void ACashRegister::Interact(AActor* Caller)
 
 	if (Orders.Num() == 0) return;
 
-	FinishStation->SetCurrentOrder(Orders[0]);
-	ITakeOrderInterface::Execute_SetCurrentRecipe(Caller, Orders[0].RecipeType);
-	DeleteOrder();
+	ITakeOrderInterface::Execute_SetCurrentRecipe(Caller, this, Orders[0]);
 }
 
 void ACashRegister::AddOrder(FOrder Order)
 {
-	Orders.Add(Order);
+	if (HasAuthority())
+	{
+		Orders.Add(Order);
+	}
 }
 
 void ACashRegister::DeleteOrder()
 {
-	Orders.RemoveAt(0);
+	if (HasAuthority())
+	{
+		Orders.RemoveAt(0);
+	}
 }

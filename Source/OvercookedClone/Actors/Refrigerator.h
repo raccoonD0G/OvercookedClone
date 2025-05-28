@@ -18,6 +18,9 @@ public:
 public:
 	virtual void Interact(AActor* Caller) override;
 
+	UFUNCTION(BlueprintCallable)
+	class AIngredient* SpawnIngredient(EIngredientType IngredientType);
+
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	TMap<EIngredientType, TSubclassOf<class AIngredient>> IngredientClasses;

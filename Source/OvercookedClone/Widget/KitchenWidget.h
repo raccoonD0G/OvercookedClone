@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Order.h"
+#include "Recipe.h"
 #include "KitchenWidget.generated.h"
 
 /**
@@ -24,10 +25,7 @@ public:
 	void Init(class AFinishStation* TargetFinishStation);
 
 	UFUNCTION()
-	void AddIngredientText(class AIngredient* NewIngredient);
-
-	UFUNCTION()
-	void ClearIngredients();
+	void ResetIngredients(const TArray<FIngredientInfo>& IngredientInfos);
 
 	UFUNCTION()
 	void SetOrder(const FOrder& NewOrder);

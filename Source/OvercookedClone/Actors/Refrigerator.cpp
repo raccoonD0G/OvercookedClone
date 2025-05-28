@@ -14,6 +14,8 @@ ARefrigerator::ARefrigerator()
 
 void ARefrigerator::Interact(AActor* Caller)
 {
+	Super::Interact(Caller);
+
 	if (!Caller || !Caller->GetClass()->ImplementsInterface(URefrigeratorInteractInterface::StaticClass()))
 	{
 		return;
@@ -34,14 +36,19 @@ void ARefrigerator::Interact(AActor* Caller)
 
 	check(IngredientClasses[SelectedIngredientType]);
 
+	// ObtainIngredients 호출
+	IRefrigeratorInteractInterface::Execute_ObtainIngredients(Caller, this, SelectedIngredientType);
+}
+
+AIngredient* ARefrigerator::SpawnIngredient(EIngredientType IngredientType)
+{
 	FActorSpawnParameters IngredientSpawnParam;
 	IngredientSpawnParam.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	AIngredient* SelectedIngredientActor = GetWorld()->SpawnActor<AIngredient>(IngredientClasses[SelectedIngredientType], IngredientSpawnParam);
+	AIngredient* SelectedIngredientActor = GetWorld()->SpawnActor<AIngredient>(IngredientClasses[IngredientType], IngredientSpawnParam);
 
 	check(SelectedIngredientActor);
 
-	// ObtainIngredients 호출
-	IRefrigeratorInteractInterface::Execute_ObtainIngredients(Caller, SelectedIngredientActor);
+	return SelectedIngredientActor;
 }
 
 

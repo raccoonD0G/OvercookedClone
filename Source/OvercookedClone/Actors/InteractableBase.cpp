@@ -6,7 +6,7 @@
 AInteractableBase::AInteractableBase()
 {
 	PrimaryActorTick.bCanEverTick = true;
-
+	bReplicates = true;
 }
 
 void AInteractableBase::Interact(AActor* Caller)

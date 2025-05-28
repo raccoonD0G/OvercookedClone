@@ -14,7 +14,6 @@ class OVERCOOKEDCLONE_API AInteractableBase : public AActor, public IInteractabl
 	
 public:
 	AInteractableBase();
-
-	UFUNCTION()
+	
 	virtual void Interact(AActor* Caller) override;
 };

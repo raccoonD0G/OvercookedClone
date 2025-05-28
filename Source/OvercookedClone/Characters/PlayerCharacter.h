@@ -13,4 +13,15 @@ class OVERCOOKEDCLONE_API APlayerCharacter : public ACharacter
 
 public:
 	APlayerCharacter();	
+
+protected:
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+public:
+	FORCEINLINE void SetFinishStation(class AFinishStation* NewFinishStation) { FinishStation = NewFinishStation; }
+	FORCEINLINE class AFinishStation* GetFinishStation() { return FinishStation; }
+
+private:
+	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class AFinishStation> FinishStation;
 };

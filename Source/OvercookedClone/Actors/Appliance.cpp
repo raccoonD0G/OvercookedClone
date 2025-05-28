@@ -29,6 +29,7 @@ AAppliance::AAppliance()
 
 void AAppliance::Interact(AActor* Caller)
 {
+	Super::Interact(Caller);
 	if (Caller && Caller->GetClass()->ImplementsInterface(UChangeIngredientStateInterface::StaticClass()))
 	{
 		IChangeIngredientStateInterface::Execute_ChangeIngredientState(Caller, OutIngredientState);

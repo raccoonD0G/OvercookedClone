@@ -18,8 +18,6 @@ void UKitchenWidget::SetRecipeText(const FText& InText)
 
 void UKitchenWidget::AddIngredientText(const FText& InText)
 {
-	if (!Ingredients) return;
-
 	// 텍스트 블록 생성
 	UTextBlock* NewTextBlock = NewObject<UTextBlock>(this);
 	if (NewTextBlock)
@@ -36,18 +34,16 @@ void UKitchenWidget::AddIngredientText(const FText& InText)
 	}
 }
 
-void UKitchenWidget::AddIngredientText(AIngredient* NewIngredient)
+void UKitchenWidget::ResetIngredients(const TArray<FIngredientInfo>& IngredientInfos)
 {
-	const UEnum* EnumPtr = StaticEnum<EIngredientType>();
-	FText IngredientText = EnumPtr->GetDisplayNameTextByValue(static_cast<int64>(NewIngredient->GetIngredientType()));
-	AddIngredientText(IngredientText);
-}
+	Ingredients->ClearChildren();
 
-void UKitchenWidget::ClearIngredients()
-{
-	if (Ingredients)
+	const UEnum* EnumPtr = StaticEnum<EIngredientType>();
+
+	for (const auto& IngredientInfo : IngredientInfos)
 	{
-		Ingredients->ClearChildren();
+		FText IngredientText = EnumPtr->GetDisplayNameTextByValue(static_cast<int64>(IngredientInfo.Ingredient));
+		AddIngredientText(IngredientText);
 	}
 }
 
@@ -61,7 +57,6 @@ void UKitchenWidget::SetOrder(const FOrder& NewOrder)
 void UKitchenWidget::Init(AFinishStation* TargetFinishStation)
 {
 	FinishStation = TargetFinishStation;
-	FinishStation->OnIngredientAdd.AddDynamic(this, &UKitchenWidget::AddIngredientText);
-	FinishStation->OnIngredientClear.AddDynamic(this, &UKitchenWidget::ClearIngredients);
+	FinishStation->OnIngredientInfosChange.AddDynamic(this, &UKitchenWidget::ResetIngredients);
 	FinishStation->OnOrderSet.AddDynamic(this, &UKitchenWidget::SetOrder);
 }

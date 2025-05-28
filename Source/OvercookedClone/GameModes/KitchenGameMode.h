@@ -14,4 +14,6 @@ class OVERCOOKEDCLONE_API AKitchenGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 	
+protected:
+	virtual APawn* SpawnDefaultPawnFor_Implementation(AController* NewPlayer, AActor* StartSpot) override;
 };

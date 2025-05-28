@@ -16,9 +16,12 @@ public:
 	// Sets default values for this actor's properties
 	AIngredient();
 
+protected:
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const;
+
 public:
-	UFUNCTION(BlueprintCallable, Category = "Ingredient")
-	void ChangeIngredientState(EIngredientState NewIngredientState);
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Ingredient")
+	void Server_ChangeIngredientState(EIngredientState NewIngredientState);
 
 	FORCEINLINE EIngredientType GetIngredientType() const { return IngredientType; }
 	FORCEINLINE EIngredientState GetIngredientState() const { return IngredientState; }
@@ -34,7 +37,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	EIngredientType IngredientType;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	EIngredientState IngredientState;
 	
 };

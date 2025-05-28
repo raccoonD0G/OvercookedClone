@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
-#include "Recipe.h"
+#include "Order.h"
 #include "TakeOrderInterface.generated.h"
 
 // This class does not need to be modified.
@@ -24,5 +24,5 @@ class OVERCOOKEDCLONE_API ITakeOrderInterface
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void SetCurrentRecipe(ERecipeType NewRecipeType);
+	void SetCurrentRecipe(class ACashRegister* CashRegister, const FOrder& NewOrder);
 };

@@ -9,39 +9,45 @@
 #include "Subsystems/RecipeSubsystem.h"
 #include "Kismet/GameplayStatics.h"
 #include "HUD/KitchenHUD.h"
+#include "Net/UnrealNetwork.h"
 
 
 AFinishStation::AFinishStation()
 {
 	PrimaryActorTick.bCanEverTick = true;
+	bReplicates = true;
 
 }
 
-void AFinishStation::PostInitializeComponents()
+void AFinishStation::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
-	Super::PostInitializeComponents();
-	OnClicked.AddDynamic(this, &AFinishStation::OnActorClicked);
-
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(AFinishStation, CurrentOrder);
+	DOREPLIFETIME(AFinishStation, IngredientInfos);
 }
 
 void AFinishStation::BeginPlay()
 {
 	Super::BeginPlay();
+
 	APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-	if (AKitchenHUD* KitchenHUD = Cast<AKitchenHUD>(PC->GetHUD()))
+	if (PC)
 	{
-		KitchenHUD->SetFinishStation(this);
+		AKitchenHUD* KitchenHUD = Cast<AKitchenHUD>(PC->GetHUD());
+		if (KitchenHUD)
+		{
+			KitchenHUD->SetFinishStation(this);
+		}
 	}
 }
 
-
-void AFinishStation::OnActorClicked(AActor* TouchedActor, FKey ButtonPressed)
+void AFinishStation::OnClicked()
 {
 	URecipeSubsystem* RecipeSubsystem = GetGameInstance()->GetSubsystem<URecipeSubsystem>();
 
 	if (!RecipeSubsystem) return;
 
-	if (Ingredients.IsEmpty()) return;
+	if (IngredientInfos.IsEmpty()) return;
 
 	TArray<FIngredientInfo> IngredientRequirements = RecipeSubsystem->GetRecipeByType(CurrentOrder.RecipeType).RequiredIngredients;
 
@@ -49,7 +55,7 @@ void AFinishStation::OnActorClicked(AActor* TouchedActor, FKey ButtonPressed)
 
 	for (const auto& IngredientRequirement : IngredientRequirements)
 	{
-		if (!Ingredients.Contains(IngredientRequirement))
+		if (!IngredientInfos.Contains(IngredientRequirement))
 		{
 			bIsCorrect = false;
 		}
@@ -72,9 +78,9 @@ void AFinishStation::OnActorClicked(AActor* TouchedActor, FKey ButtonPressed)
 		}
 	}
 
-	Ingredients.Empty();
+	IngredientInfos.Empty();
 
-	OnIngredientClear.Broadcast();
+	OnIngredientInfosChange.Broadcast(IngredientInfos);
 }
 
 void AFinishStation::SetCurrentOrder(FOrder NewOrder)
@@ -83,21 +89,33 @@ void AFinishStation::SetCurrentOrder(FOrder NewOrder)
 	OnOrderSet.Broadcast(NewOrder);
 }
 
+void AFinishStation::AddIngredientInfo(FIngredientInfo IngredientInfo)
+{
+	if (HasAuthority())
+	{
+		IngredientInfos.Add(IngredientInfo);
+		OnIngredientInfosChange.Broadcast(IngredientInfos);
+	}
+}
+
+void AFinishStation::OnRep_CurrentOrder()
+{
+	OnOrderSet.Broadcast(CurrentOrder);
+}
+
+void AFinishStation::OnRep_Ingredients()
+{
+	OnIngredientInfosChange.Broadcast(IngredientInfos);
+}
+
 void AFinishStation::Interact(AActor* Caller)
 {
+	Super::Interact(Caller);
+
 	if (!Caller || !Caller->GetClass()->ImplementsInterface(UFinishStationInteractInterface::StaticClass()))
 	{
 		return;
 	}
 
-	AIngredient* Ingredient = IFinishStationInteractInterface::Execute_PutOutIngredient(Caller);
-
-	if (!Ingredient) return;
-
-	OnIngredientAdd.Broadcast(Ingredient);
-
-	Ingredients.Add(FIngredientInfo(Ingredient->GetIngredientType(), Ingredient->GetIngredientState()));
-
-	Ingredient->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-	Ingredient->AttachToActor(this, FAttachmentTransformRules::KeepWorldTransform);
+	IFinishStationInteractInterface::Execute_PutOutIngredient(Caller, this);
 }
