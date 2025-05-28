@@ -23,10 +23,11 @@ void ACustomer::Init(ACashRegister* NewCashRegister)
 
 void ACustomer::GenerateOrder()
 {
+	check(TargetTable);
 	FOrder NewOrder;
 	NewOrder.CustomerTable = TargetTable;
 	UEnum* EnumPtr = StaticEnum<ERecipeType>();
-	NewOrder.RecipeType = static_cast<ERecipeType>(FMath::RandRange(1, EnumPtr->NumEnums() - 1));
+	NewOrder.RecipeType = static_cast<ERecipeType>(FMath::RandRange(1, EnumPtr->NumEnums() - 2));
 	CashRegister->AddOrder(NewOrder);
 }
 
@@ -48,8 +49,6 @@ void ACustomer::EndMoveToCachRegister()
 	ACustomerState* CustomerState = Cast<ACustomerState>(StateAIController->GetAIState());
 	check(CustomerState);
 
-	GenerateOrder();
-
 	UCustomerTableSubsystem* TableSubsystem = GetWorld()->GetSubsystem<UCustomerTableSubsystem>();
 	check(TableSubsystem);
 
@@ -66,6 +65,8 @@ void ACustomer::EndMoveToCachRegister()
 	}
 
 	TableSubsystem->OccupyTable(this);
+
+	GenerateOrder();
 
 	CustomerState->SetCurrentState(ECustomerState::MoveToTable);
 }
