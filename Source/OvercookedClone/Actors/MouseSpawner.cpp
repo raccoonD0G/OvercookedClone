@@ -18,8 +18,6 @@ AActor* AMouseSpawner::SpawnActorDeffered()
 	SpawnLocation = RandomTransform.GetLocation();
 	SpawnRotation = RandomTransform.GetRotation().Rotator();
 
-	SpawnedActor->SetActorTransform(RandomTransform);
-
 	return SpawnedActor;
 }
 
