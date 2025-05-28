@@ -13,46 +13,39 @@
 ACustomerSpawner::ACustomerSpawner()
 {
 	PrimaryActorTick.bCanEverTick = false;
-	SpawnInterval = 7.0f;
+	
 }
 
-void ACustomerSpawner::BeginPlay()
+AActor* ACustomerSpawner::SpawnActorDeffered()
 {
-	Super::BeginPlay();
-	SpawnCustomer();
-	GetWorld()->GetTimerManager().SetTimer(
-		SpawnTimerHandle,
-		this,
-		&ACustomerSpawner::SpawnCustomer,
-		SpawnInterval,
-		true
-	);
-}
-
-void ACustomerSpawner::SpawnCustomer()
-{
-	if (!CustomerClass) return;
+	AActor* SpawnedActor = Super::SpawnActorDeffered();
 
 	UCustomerTableSubsystem* TableSubsystem = GetWorld()->GetSubsystem<UCustomerTableSubsystem>();
-	if (!TableSubsystem) return;
+	if (!TableSubsystem)
+	{
+		GetWorld()->DestroyActor(SpawnedActor);
+		return nullptr;
+	}
 
-	if (TableSubsystem->LeftSeatsNum() == 0) return; 
+	if (TableSubsystem->LeftSeatsNum() == 0)
+	{
+		GetWorld()->DestroyActor(SpawnedActor);
+		return nullptr;
+	}
 
-	FVector SpawnLocation = FVector::ZeroVector;
-	FRotator SpawnRotation = FRotator::ZeroRotator;
+	if (!SpawnedActor) return nullptr;
 
-	FTransform SpawnTransform(SpawnRotation, SpawnLocation);
-	ACustomer* Customer = Cast<ACustomer>(UGameplayStatics::BeginDeferredActorSpawnFromClass(
-		this,
-		CustomerClass,
-		SpawnTransform
-	));
+	ACustomer* Customer = Cast<ACustomer>(SpawnedActor);
 
-	if (!Customer) return;
+	if (!Customer)
+	{
+		GetWorld()->DestroyActor(SpawnedActor);
+		return nullptr;
+	}
 
 	TableSubsystem->OccupyTable(Customer);
 	Customer->Init(CashRegister);
 
-	UGameplayStatics::FinishSpawningActor(Customer, SpawnTransform);
+	return Customer;
 }
 
