@@ -18,10 +18,14 @@ public:
 	AKitchenGameState();
 
 protected:
+	virtual void GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const override;
 	virtual void Tick(float DeltaSeconds) override;
 
 public:
+	UFUNCTION(BlueprintCallable)
 	FORCEINLINE void IncreaseMouseCount() { MouseCount++; }
+
+	UFUNCTION(BlueprintCallable)
 	FORCEINLINE void DecreaseMouseCount() { MouseCount--; }
 
 	FORCEINLINE int32 GetMouseCount() const { return MouseCount; }
@@ -35,19 +39,19 @@ public:
 	FORCEINLINE float GetScore() const { return Score; }
 	
 private:
-	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Replicated, VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
 	int32 MouseCount;
 
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 	float MouseCountRatio;
 
-	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Replicated, VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
 	uint8 bIsSeatsFull : 1;
 
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 	float SeatsFullRatio;
 
-	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Replicated, VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
 	float Score;
 	
 };

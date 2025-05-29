@@ -40,6 +40,7 @@ void ACustomerController::OnCurrentStateChange(ECustomerState NewState)
 	case ECustomerState::Eating:
 		break;
 	case ECustomerState::Exiting:
+		BlackboardComp->SetValueAsVector(TEXT("ExitPos"), Customer->GetExitPos());
 		break;
 	}
 }

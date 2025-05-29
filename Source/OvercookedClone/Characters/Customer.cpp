@@ -16,6 +16,12 @@ ACustomer::ACustomer()
 
 }
 
+void ACustomer::BeginPlay()
+{
+	Super::BeginPlay();
+	ExitPos = GetActorLocation();
+}
+
 void ACustomer::Init(ACashRegister* NewCashRegister)
 {
 	SetCashRegister(NewCashRegister);

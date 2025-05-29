@@ -21,6 +21,9 @@ class OVERCOOKEDCLONE_API ACustomer : public ACharacter, public ITableOccupyInte
 public:
 	ACustomer();
 
+protected:
+	virtual void BeginPlay() override;
+
 public:
 	void Init(class ACashRegister* NewCashRegister);
 
@@ -29,6 +32,7 @@ public:
 
 	FORCEINLINE class ACustomerTable* GetTargetTable() const { return TargetTable; }
 	FORCEINLINE class ACashRegister* GetTargetRegister() const { return CashRegister; }
+	FORCEINLINE const FVector& GetExitPos() const { return ExitPos; }
 
 private:
 	FORCEINLINE void SetTargetTable(class ACustomerTable* NewTable) { TargetTable = NewTable; }
@@ -40,6 +44,9 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class ACashRegister> CashRegister;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	FVector ExitPos;
 
 public:
 	UFUNCTION()

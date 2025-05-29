@@ -2,6 +2,7 @@
 
 
 #include "GameStates/KitchenGameState.h"
+#include "Net/UnrealNetwork.h"
 
 
 AKitchenGameState::AKitchenGameState()
@@ -14,16 +15,29 @@ AKitchenGameState::AKitchenGameState()
 	SeatsFullRatio = 0.5;
 
 	PrimaryActorTick.bCanEverTick = true;
+
+	bReplicates = true;
+}
+
+void AKitchenGameState::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(AKitchenGameState, MouseCount);
+	DOREPLIFETIME(AKitchenGameState, bIsSeatsFull);
+	DOREPLIFETIME(AKitchenGameState, Score);
 }
 
 void AKitchenGameState::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
-	Score -= MouseCount * MouseCountRatio * DeltaSeconds;
-
-	if (bIsSeatsFull)
+	if (HasAuthority())
 	{
-		Score -= SeatsFullRatio * DeltaSeconds;
+		Score -= MouseCount * MouseCountRatio * DeltaSeconds;
+
+		if (bIsSeatsFull)
+		{
+			Score -= SeatsFullRatio * DeltaSeconds;
+		}
 	}
 }

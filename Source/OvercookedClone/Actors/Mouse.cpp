@@ -3,6 +3,7 @@
 
 #include "Actors/Mouse.h"
 #include "GameStates/KitchenGameState.h"
+#include "Interfaces/DestroyMouseInterface.h"
 
 AMouse::AMouse()
 {
@@ -25,11 +26,8 @@ void AMouse::Interact(AActor* Caller)
 {
 	Super::Interact(Caller);
 
-	AKitchenGameState* KitchenGameState = GetWorld()->GetGameState<AKitchenGameState>();
-	if (KitchenGameState)
+	if (Caller && Caller->GetClass()->ImplementsInterface(UDestroyMouseInterface::StaticClass()))
 	{
-		KitchenGameState->DecreaseMouseCount();
+		IDestroyMouseInterface::Execute_DestroyMouse(Caller, this);
 	}
-
-	GetWorld()->DestroyActor(this);
 }

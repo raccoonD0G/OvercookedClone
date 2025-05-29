@@ -4,12 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
-#include "Recipe.h"
-#include "ChangeIngredientStateInterface.generated.h"
+
+#include "DestroyMouseInterface.generated.h"
 
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI, BlueprintType)
-class UChangeIngredientStateInterface : public UInterface
+class UDestroyMouseInterface : public UInterface
 {
 	GENERATED_BODY()
 };
@@ -17,13 +17,12 @@ class UChangeIngredientStateInterface : public UInterface
 /**
  * 
  */
-class OVERCOOKEDCLONE_API IChangeIngredientStateInterface
+class OVERCOOKEDCLONE_API IDestroyMouseInterface
 {
 	GENERATED_BODY()
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void ChangeIngredientState(EIngredientState OutIngredientState);
-	
+	void DestroyMouse(class AMouse* MouseToDestroy);
 };
