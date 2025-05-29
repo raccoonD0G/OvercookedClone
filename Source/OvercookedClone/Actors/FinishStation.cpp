@@ -30,6 +30,11 @@ void AFinishStation::BeginPlay()
 {
 	Super::BeginPlay();
 
+	if (HasAuthority())
+	{
+		SetCurrentOrder(FOrder());
+	}
+
 	APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 	if (PC)
 	{
@@ -65,6 +70,7 @@ void AFinishStation::OnClicked()
 	{
 		AFood* NewFood = GetWorld()->SpawnActor<AFood>(FoodClasses[CurrentOrder.RecipeType]);
 		CurrentOrder.CustomerTable->PlaceFood(NewFood);
+		SetCurrentOrder(FOrder());
 	}
 
 	TArray<AActor*> AttachedActors;

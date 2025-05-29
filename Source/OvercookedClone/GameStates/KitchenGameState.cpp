@@ -41,3 +41,13 @@ void AKitchenGameState::Tick(float DeltaSeconds)
 		}
 	}
 }
+
+void AKitchenGameState::IncreaseScore(float Amount)
+{
+	Score += Amount;
+}
+
+void AKitchenGameState::DecreaseScore(float Amount)
+{
+	Score -= Amount;
+}

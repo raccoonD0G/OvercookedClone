@@ -22,7 +22,16 @@ public:
 	ACustomer();
 
 protected:
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	virtual void BeginPlay() override;
+
+public:
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE class ACustomerState* GetCustomerState() { return CustomerState; }
+
+private:
+	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class ACustomerState> CustomerState;
 
 public:
 	void Init(class ACashRegister* NewCashRegister);

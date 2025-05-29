@@ -37,6 +37,10 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE float GetScore() const { return Score; }
+
+	void IncreaseScore(float Amount);
+
+	void DecreaseScore(float Amount);
 	
 private:
 	UPROPERTY(Replicated, VisibleAnywhere, meta = (AllowPrivateAccess = "true"))

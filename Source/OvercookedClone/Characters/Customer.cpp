@@ -9,6 +9,7 @@
 #include "AIStates/CustomerState.h"
 #include "Actors/CustomerTable.h"
 #include "GameStates/KitchenGameState.h"
+#include "Net/UnrealNetwork.h"
 
 ACustomer::ACustomer()
 {
@@ -16,10 +17,30 @@ ACustomer::ACustomer()
 	bReplicates = true;
 }
 
+void ACustomer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(ACustomer, CustomerState);
+}
+
 void ACustomer::BeginPlay()
 {
 	Super::BeginPlay();
 	ExitPos = GetActorLocation();
+
+	if (HasAuthority())
+	{
+		AStateAIController* StateAIController = Cast<AStateAIController>(GetController());
+		if (StateAIController)
+		{
+			ACustomerState* AIState = Cast<ACustomerState>(StateAIController->GetAIState());
+			if (AIState)
+			{
+				CustomerState = AIState;
+			}
+		}
+		
+	}
 }
 
 void ACustomer::Init(ACashRegister* NewCashRegister)
@@ -41,6 +62,7 @@ void ACustomer::OccupyTable(ACustomerTable* Table)
 {
 	SetTargetTable(Table);
 	TargetTable->OnFoodPlaced.AddDynamic(this, &ACustomer::EndWaitingForFood);
+	TargetTable->OnOrderIgnored.AddDynamic(this, &ACustomer::EndEating);
 }
 
 ACustomerTable* ACustomer::OccupiedTable() const
@@ -52,7 +74,6 @@ void ACustomer::EndMoveToCachRegister()
 {
 	AStateAIController* StateAIController = Cast<AStateAIController>(GetController());
 	check(StateAIController);
-	ACustomerState* CustomerState = Cast<ACustomerState>(StateAIController->GetAIState());
 	check(CustomerState);
 
 	UCustomerTableSubsystem* TableSubsystem = GetWorld()->GetSubsystem<UCustomerTableSubsystem>();
@@ -81,7 +102,6 @@ void ACustomer::EndMoveToTable()
 {
 	AStateAIController* StateAIController = Cast<AStateAIController>(GetController());
 	check(StateAIController);
-	ACustomerState* CustomerState = Cast<ACustomerState>(StateAIController->GetAIState());
 	check(CustomerState);
 
 	CustomerState->SetCurrentState(ECustomerState::WaitForFood);
@@ -91,7 +111,6 @@ void ACustomer::EndWaitingForFood()
 {
 	AStateAIController* StateAIController = Cast<AStateAIController>(GetController());
 	check(StateAIController);
-	ACustomerState* CustomerState = Cast<ACustomerState>(StateAIController->GetAIState());
 	check(CustomerState);
 
 	CustomerState->SetCurrentState(ECustomerState::Eating);
@@ -102,7 +121,6 @@ void ACustomer::EndEating()
 {
 	AStateAIController* StateAIController = Cast<AStateAIController>(GetController());
 	check(StateAIController);
-	ACustomerState* CustomerState = Cast<ACustomerState>(StateAIController->GetAIState());
 	check(CustomerState);
 	UCustomerTableSubsystem* CustomerTableSubsystem = GetWorld()->GetSubsystem<UCustomerTableSubsystem>();
 	check(CustomerTableSubsystem);
@@ -116,7 +134,18 @@ void ACustomer::EndEating()
 		{
 			KitchenGameState->SetIsSeatsFullFalse();
 		}
+
+		if (CustomerState->GetCurrentState() == ECustomerState::Eating)
+		{
+			KitchenGameState->IncreaseScore(5.0f);
+		}
+		else
+		{
+			KitchenGameState->DecreaseScore(5.0f);
+		}
 	}
+
+	
 
 	CustomerState->SetCurrentState(ECustomerState::Exiting);
 }

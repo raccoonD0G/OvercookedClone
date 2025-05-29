@@ -24,3 +24,8 @@ void ACustomerTable::ClearFood()
 	FoodOnTable = nullptr;
 }
 
+void ACustomerTable::OrderIgnored()
+{
+	OnOrderIgnored.Broadcast();
+}
+

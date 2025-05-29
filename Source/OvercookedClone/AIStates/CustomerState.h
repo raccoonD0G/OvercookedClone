@@ -27,14 +27,23 @@ class OVERCOOKEDCLONE_API ACustomerState : public AAIState
 {
 	GENERATED_BODY()
 	
-private:
-	UPROPERTY(VisibleAnywhere)
-	ECustomerState CurrentState;
+protected:
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 public:
 	UFUNCTION(BlueprintCallable)
 	void SetCurrentState(ECustomerState NewState);
 
+	UFUNCTION(BlueprintCallable)
+	ECustomerState GetCurrentState() const;
+
+
 	FOnCurrentStateChangeDelegate OnCurrentStateChange;
+
+private:
+	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	ECustomerState CurrentState;
+
+
 	
 };

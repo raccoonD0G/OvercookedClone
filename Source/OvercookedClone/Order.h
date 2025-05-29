@@ -8,7 +8,13 @@ USTRUCT(BlueprintType)
 struct FOrder
 {
 	GENERATED_BODY()
-	
+public:
+	FOrder()
+	{
+		RecipeType = ERecipeType::None;
+		CustomerTable = nullptr;
+	}
+
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	ERecipeType RecipeType;
