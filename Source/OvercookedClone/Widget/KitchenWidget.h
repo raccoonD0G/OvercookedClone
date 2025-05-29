@@ -32,10 +32,10 @@ public:
 
 protected:
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<class UTextBlock> Recipe;
+	TObjectPtr<class UTextBlock> RecipeText;
 
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<class UVerticalBox> Ingredients;
+	TObjectPtr<class UVerticalBox> IngredientsVerticalBox;
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))

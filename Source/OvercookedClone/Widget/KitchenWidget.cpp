@@ -10,9 +10,9 @@
 
 void UKitchenWidget::SetRecipeText(const FText& InText)
 {
-	if (Recipe)
+	if (RecipeText)
 	{
-		Recipe->SetText(InText);
+		RecipeText->SetText(InText);
 	}
 }
 
@@ -25,7 +25,7 @@ void UKitchenWidget::AddIngredientText(const FText& InText)
 		NewTextBlock->SetText(InText);
 
 		// VerticalBox¿¡ Ãß°¡
-		UVerticalBoxSlot* NewSlot = Ingredients->AddChildToVerticalBox(NewTextBlock);
+		UVerticalBoxSlot* NewSlot = IngredientsVerticalBox->AddChildToVerticalBox(NewTextBlock);
 		if (NewSlot)
 		{
 			NewSlot->SetPadding(FMargin(5.f));
@@ -36,7 +36,7 @@ void UKitchenWidget::AddIngredientText(const FText& InText)
 
 void UKitchenWidget::ResetIngredients(const TArray<FIngredientInfo>& IngredientInfos)
 {
-	Ingredients->ClearChildren();
+	IngredientsVerticalBox->ClearChildren();
 
 	const UEnum* EnumPtr = StaticEnum<EIngredientType>();
 
@@ -50,8 +50,8 @@ void UKitchenWidget::ResetIngredients(const TArray<FIngredientInfo>& IngredientI
 void UKitchenWidget::SetOrder(const FOrder& NewOrder)
 {
 	const UEnum* EnumPtr = StaticEnum<ERecipeType>();
-	FText RecipeText = EnumPtr->GetDisplayNameTextByValue(static_cast<int64>(NewOrder.RecipeType));
-	SetRecipeText(RecipeText);
+	FText RecipeEnumText = EnumPtr->GetDisplayNameTextByValue(static_cast<int64>(NewOrder.RecipeType));
+	SetRecipeText(RecipeEnumText);
 }
 
 void UKitchenWidget::Init(AFinishStation* TargetFinishStation)
