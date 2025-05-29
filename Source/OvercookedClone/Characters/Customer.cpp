@@ -13,7 +13,7 @@
 ACustomer::ACustomer()
 {
 	PrimaryActorTick.bCanEverTick = true;
-
+	bReplicates = true;
 }
 
 void ACustomer::BeginPlay()
