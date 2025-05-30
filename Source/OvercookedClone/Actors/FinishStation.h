@@ -31,11 +31,17 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetCurrentOrder(FOrder NewOrder);
 
+	UFUNCTION(BlueprintCallable)
+	const FOrder& GetCurrentOrder() const { return CurrentOrder; }
+
 	FOnIngredientInfosChangeDelegate OnIngredientInfosChange;
 	FOnOrderSetDelegate OnOrderSet;
 
 	UFUNCTION(BlueprintCallable)
 	void AddIngredientInfo(FIngredientInfo IngredientInfo);
+
+protected:
+	virtual void Interact(AActor* Caller) override;
 
 private:
 	UPROPERTY(ReplicatedUsing = OnRep_Ingredients, VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
@@ -53,7 +59,4 @@ private:
 
 	UFUNCTION()
 	void OnRep_Ingredients();
-
-public:
-	virtual void Interact(AActor* Caller) override;
 };

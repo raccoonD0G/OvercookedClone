@@ -3,25 +3,25 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
-#include "InteractableBase.generated.h"
+#include "GameFramework/Character.h"
+#include "Mouse.generated.h"
 
-UCLASS(Abstract, BlueprintType)
-class OVERCOOKEDCLONE_API AInteractableBase : public AActor
+UCLASS()
+class OVERCOOKEDCLONE_API AMouse : public ACharacter
 {
 	GENERATED_BODY()
 	
 public:
-	AInteractableBase();
-
+	AMouse();
+	
 protected:
 	virtual void PostInitializeComponents() override;
-
-protected:
-	UFUNCTION()
-	virtual void Interact(AActor* Caller);
+	virtual void BeginPlay() override;
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInteractComponent> InteractComponent;
+
+	UFUNCTION()
+	void Interact(AActor* Caller);
 };
