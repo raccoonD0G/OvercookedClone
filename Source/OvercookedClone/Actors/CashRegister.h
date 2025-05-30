@@ -20,9 +20,10 @@ public:
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-public:
+protected:
 	virtual void Interact(AActor* Caller) override;
 
+public:
 	UFUNCTION(BlueprintCallable)
 	void AddOrder(FOrder Order);
 

@@ -3,6 +3,8 @@
 
 #include "PlayerStates/PlayerCharacterState.h"
 #include "Net/UnrealNetwork.h"
+#include "Characters/PlayerCharacter.h"
+#include "Actors/FinishStation.h"
 
 APlayerCharacterState::APlayerCharacterState()
 {
@@ -12,33 +14,72 @@ APlayerCharacterState::APlayerCharacterState()
 void APlayerCharacterState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-	DOREPLIFETIME(APlayerCharacterState, CurrentState);
+	DOREPLIFETIME(APlayerCharacterState, NextTask);
 }
 
 void APlayerCharacterState::OnConstruction(const FTransform& Transform)
 {
 	Super::OnConstruction(Transform);
 
-	SetCurrentState(GetCurrentState());
+	SetNextTask(GetCurrentState());
 }
 
-void APlayerCharacterState::SetCurrentState(EPlayerCharacterState NewState)
+void APlayerCharacterState::SetNextTask(EPlayerTask NewTask)
 {
-	Server_SetCurrentState(NewState);
+	Server_SetNextTask(NewTask);
 }
 
-void APlayerCharacterState::Server_SetCurrentState_Implementation(EPlayerCharacterState NewState)
+void APlayerCharacterState::Server_SetNextTask_Implementation(EPlayerTask NewTask)
 {
-	CurrentState = NewState;
-	switch (CurrentState)
+	switch (NewTask)
 	{
-	case EPlayerCharacterState::TakeOrder:
+	case EPlayerTask::TakeOrder:
 		break;
-	case EPlayerCharacterState::TakeIngredient:
+	case EPlayerTask::TakeIngredient:
 		break;
-	case EPlayerCharacterState::ChangeIngredientState:
+	case EPlayerTask::ChangeIngredientStateOrPutOnFinishTable:
 		break;
-	case EPlayerCharacterState::PutOnFinishTable:
+	case EPlayerTask::PutOnFinishTable:
 		break;
 	}
+
+	OnNextTaskChange.Broadcast(NewTask);
+
+	NextTask = NewTask;
 }
+
+void APlayerCharacterState::EndTakeOrder()
+{
+	SetNextTask(EPlayerTask::TakeIngredient);
+}
+
+void APlayerCharacterState::EndTakeIngredient()
+{
+	SetNextTask(EPlayerTask::ChangeIngredientStateOrPutOnFinishTable);
+}
+
+void APlayerCharacterState::EndChangeIngredientState()
+{
+	SetNextTask(EPlayerTask::PutOnFinishTable);
+}
+
+void APlayerCharacterState::EndPutOnFinishTable()
+{
+	SetNextTask(EPlayerTask::TakeIngredient);
+}
+
+void APlayerCharacterState::EndClickFinishStation()
+{
+	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetPawn());
+	const FOrder& Order = PlayerCharacter->GetFinishStation()->GetCurrentOrder();
+
+	if (Order.RecipeType == ERecipeType::None)
+	{
+		SetNextTask(EPlayerTask::TakeOrder);
+	}
+	else
+	{
+		SetNextTask(EPlayerTask::TakeIngredient);
+	}
+}
+

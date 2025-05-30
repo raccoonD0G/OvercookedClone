@@ -16,17 +16,9 @@ public:
 	AAppliance();
 
 protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TObjectPtr<class UBoxComponent> BoxComponent;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TObjectPtr<class UTextRenderComponent> TextComponent;
+	virtual void Interact(AActor* Caller) override;
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	EIngredientState OutIngredientState;
-
-public:
-	virtual void Interact(AActor* Caller) override;
-
 };
