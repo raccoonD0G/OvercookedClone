@@ -7,13 +7,16 @@
 #include "PlayerCharacterState.generated.h"
 
 UENUM(BlueprintType)
-enum class EPlayerCharacterState : uint8
+enum class EPlayerTask : uint8
 {
 	TakeOrder,
 	TakeIngredient,
-	ChangeIngredientState,
+	ChangeIngredientStateOrPutOnFinishTable,
 	PutOnFinishTable
 };
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnNextTaskChangeDelegate, EPlayerTask, NewTask);
+
 /**
  * 
  */
@@ -31,16 +34,34 @@ protected:
 
 public:
 	UFUNCTION(BlueprintCallable)
-	FORCEINLINE EPlayerCharacterState GetCurrentState() const { return CurrentState; }
+	FORCEINLINE EPlayerTask GetCurrentState() const { return NextTask; }
 
 	UFUNCTION(BlueprintCallable)
-	void SetCurrentState(EPlayerCharacterState NewState);
+	void SetNextTask(EPlayerTask NewTask);
 
 private:
 	UFUNCTION(Server, Reliable)
-	void Server_SetCurrentState(EPlayerCharacterState NewState);
+	void Server_SetNextTask(EPlayerTask NewTask);
 
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	EPlayerCharacterState CurrentState;
+	EPlayerTask NextTask;
+
+public:
+	FOnNextTaskChangeDelegate OnNextTaskChange;
+
+	UFUNCTION(BlueprintCallable)
+	void EndTakeOrder();
+
+	UFUNCTION(BlueprintCallable)
+	void EndTakeIngredient();
+
+	UFUNCTION(BlueprintCallable)
+	void EndChangeIngredientState();
+
+	UFUNCTION(BlueprintCallable)
+	void EndPutOnFinishTable();
+
+	UFUNCTION(BlueprintCallable)
+	void EndClickFinishStation();
 	
 };

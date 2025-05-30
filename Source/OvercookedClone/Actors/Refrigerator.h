@@ -16,10 +16,11 @@ public:
 	ARefrigerator();
 
 public:
-	virtual void Interact(AActor* Caller) override;
-
 	UFUNCTION(BlueprintCallable)
 	class AIngredient* SpawnIngredient(EIngredientType IngredientType);
+
+protected:
+	virtual void Interact(AActor* Caller) override;
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
