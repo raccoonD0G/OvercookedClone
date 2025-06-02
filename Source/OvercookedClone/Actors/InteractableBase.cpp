@@ -53,7 +53,7 @@ void AInteractableBase::Interact(AActor* Caller)
 
 void AInteractableBase::CheckAndSetInteractWidget(EPlayerTask NewState)
 {
-    if (InteractablePlayerState == NewState)
+    if (InteractablePlayerStates.Contains(NewState))
     {
         InteractWidgetComponent->GetWidget()->SetVisibility(ESlateVisibility::Visible);
     }
@@ -69,7 +69,7 @@ void AInteractableBase::BindCheckAndSetInteractWidget()
     if (APlayerCharacterState* PlayerCharacterState = Controller->GetPlayerState<APlayerCharacterState>())
     {
         PlayerCharacterState->OnNextTaskChange.AddDynamic(this, &AInteractableBase::CheckAndSetInteractWidget);
-        PlayerCharacterState->OnNextTaskChange.Broadcast(PlayerCharacterState->GetNextTask());
+        CheckAndSetInteractWidget(PlayerCharacterState->GetNextTask());
     }
     else
     {

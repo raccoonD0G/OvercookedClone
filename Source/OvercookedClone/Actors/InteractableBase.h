@@ -31,7 +31,7 @@ private:
 	TObjectPtr<class UActorOwnableWidgetComponent> InteractWidgetComponent;
 
 	UPROPERTY(EditAnywhere)
-	EPlayerTask InteractablePlayerState;
+	TSet<EPlayerTask> InteractablePlayerStates;
 
 	UFUNCTION()
 	void CheckAndSetInteractWidget(EPlayerTask NewState);
