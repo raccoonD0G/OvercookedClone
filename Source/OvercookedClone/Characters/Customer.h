@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
+#include "Characters/StateAICharacter.h"
 #include "Order.h"
 #include "Interfaces/TableOccupyInterface.h"
 #include "Interfaces/MoveToCachRegisterInterface.h"
@@ -14,7 +14,7 @@
 #include "Customer.generated.h"
 
 UCLASS()
-class OVERCOOKEDCLONE_API ACustomer : public ACharacter, public ITableOccupyInterface, public IMoveToCachRegisterInterface, public IMoveToTableInterface, public IWaitForFoodInterface, public IEatInterface, public IExitInterface
+class OVERCOOKEDCLONE_API ACustomer : public AStateAICharacter, public ITableOccupyInterface, public IMoveToCachRegisterInterface, public IMoveToTableInterface, public IWaitForFoodInterface, public IEatInterface, public IExitInterface
 {
 	GENERATED_BODY()
 
@@ -24,14 +24,6 @@ public:
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	virtual void BeginPlay() override;
-
-public:
-	UFUNCTION(BlueprintCallable)
-	FORCEINLINE class ACustomerState* GetCustomerState() { return CustomerState; }
-
-private:
-	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class ACustomerState> CustomerState;
 
 public:
 	void Init(class ACashRegister* NewCashRegister);

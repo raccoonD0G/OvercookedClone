@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "AIState/AIState.h"
+#include "AIStates/AIState.h"
 
 // Sets default values
 AAIState::AAIState()

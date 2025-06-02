@@ -30,11 +30,11 @@ public:
 
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-	virtual void OnConstruction(const FTransform& Transform) override;
+	virtual void PostInitializeComponents() override;
 
 public:
 	UFUNCTION(BlueprintCallable)
-	FORCEINLINE EPlayerTask GetCurrentState() const { return NextTask; }
+	FORCEINLINE EPlayerTask GetNextTask() const { return NextTask; }
 
 	UFUNCTION(BlueprintCallable)
 	void SetNextTask(EPlayerTask NewTask);
@@ -43,11 +43,20 @@ private:
 	UFUNCTION(Server, Reliable)
 	void Server_SetNextTask(EPlayerTask NewTask);
 
-	UPROPERTY(Replicated, EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UFUNCTION()
+	void OnRep_NextTask();
+
+	UPROPERTY(ReplicatedUsing = OnRep_NextTask, EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	EPlayerTask NextTask;
 
 public:
 	FOnNextTaskChangeDelegate OnNextTaskChange;
+
+	UFUNCTION(Server, Reliable)
+	void Server_EndTakeOrder();
+
+	UFUNCTION(Server, Reliable)
+	void Server_EndClickFinishStation();
 
 	UFUNCTION(BlueprintCallable)
 	void EndTakeOrder();

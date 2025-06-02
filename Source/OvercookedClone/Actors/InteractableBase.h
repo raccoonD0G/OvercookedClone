@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "PlayerStates/PlayerCharacterState.h"
 #include "InteractableBase.generated.h"
 
 UCLASS(Abstract, BlueprintType)
@@ -16,6 +17,7 @@ public:
 
 protected:
 	virtual void PostInitializeComponents() override;
+	virtual void BeginPlay() override;
 
 protected:
 	UFUNCTION()
@@ -24,4 +26,17 @@ protected:
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInteractComponent> InteractComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UActorOwnableWidgetComponent> InteractWidgetComponent;
+
+	UPROPERTY(EditAnywhere)
+	EPlayerTask InteractablePlayerState;
+
+	UFUNCTION()
+	void CheckAndSetInteractWidget(EPlayerTask NewState);
+
+	void BindCheckAndSetInteractWidget();
+
+	FTimerHandle RetryBindHandle;
 };

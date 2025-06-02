@@ -21,7 +21,7 @@ protected:
 
 public:
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Ingredient")
-	void Server_ChangeIngredientState(EIngredientState NewIngredientState);
+	void Server_SetIngredientState(EIngredientState NewIngredientState);
 
 	FORCEINLINE EIngredientType GetIngredientType() const { return IngredientType; }
 	FORCEINLINE EIngredientState GetIngredientState() const { return IngredientState; }
@@ -34,10 +34,10 @@ protected:
 	TObjectPtr<class UTextRenderComponent> TextComponent;
 
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	EIngredientType IngredientType;
 
-	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	EIngredientState IngredientState;
 	
 };

@@ -25,5 +25,8 @@ class OVERCOOKEDCLONE_API IChangeIngredientStateInterface
 public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void ChangeIngredientState(EIngredientState OutIngredientState);
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	EIngredientState GetIngredientStateOnHand();
 	
 };

@@ -2,12 +2,12 @@
 
 
 #include "Components/InteractComponent.h"
-#include "Component/ActorOwnableWidgetComponent.h"
+#include "Components/ActorOwnableWidgetComponent.h"
 #include "Components/BoxComponent.h"
 
 UInteractComponent::UInteractComponent()
 {
-	SetIsReplicated(true);
+	SetIsReplicatedByDefault(true);
 	SetCollisionProfileName(TEXT("InteractObject"));
 	PrimaryComponentTick.bCanEverTick = true;
 }

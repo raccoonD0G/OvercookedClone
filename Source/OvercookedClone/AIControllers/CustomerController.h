@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AIController/StateAIController.h"
+#include "AIControllers/StateAIController.h"
 #include "AIStates/CustomerState.h"
 #include "CustomerController.generated.h"
 

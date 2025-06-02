@@ -9,7 +9,7 @@ UTimerComponent::UTimerComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 	TimeLeft = MaxTimeLeft;
-	SetIsReplicated(true);
+	SetIsReplicatedByDefault(true);
 }
 
 void UTimerComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

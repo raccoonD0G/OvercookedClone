@@ -3,11 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
+#include "Characters/StateAICharacter.h"
 #include "Mouse.generated.h"
 
 UCLASS()
-class OVERCOOKEDCLONE_API AMouse : public ACharacter
+class OVERCOOKEDCLONE_API AMouse : public AStateAICharacter
 {
 	GENERATED_BODY()
 	

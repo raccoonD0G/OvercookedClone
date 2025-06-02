@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AIState/AIState.h"
+#include "AIStates/AIState.h"
 #include "CustomerState.generated.h"
 
 UENUM(BlueprintType)

@@ -21,4 +21,12 @@ protected:
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	EIngredientState OutIngredientState;
+
+// Widget Section
+private:
+	void StartStateChangeWidget();
+
+private:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UActorOwnableWidgetComponent> StateChangeWidgetComponent;
 };
