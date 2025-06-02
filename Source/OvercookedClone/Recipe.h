@@ -41,6 +41,7 @@ enum class EIngredientType : uint8
 UENUM(BlueprintType)
 enum class EIngredientState : uint8
 {
+    None        UMETA(DisplayName = "None"),
     Raw         UMETA(DisplayName = "Raw"),
     Chopped     UMETA(DisplayName = "Chopped"),
     Cooked      UMETA(DisplayName = "Cooked"),

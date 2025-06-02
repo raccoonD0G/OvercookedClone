@@ -1,10 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "AIController/StateAIController.h"
-#include "AIState/AIState.h"
+#include "AIControllers/StateAIController.h"
+#include "AIStates/AIState.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "Interfaces/StateAIInterface.h"
 
 AStateAIController::AStateAIController()
 {
@@ -35,6 +36,12 @@ void AStateAIController::OnPossess(APawn* InPawn)
 
 	if (HasAuthority())
 	{
+		IStateAIInterface* StateAIInterface = Cast<IStateAIInterface>(InPawn);
+		if (StateAIInterface)
+		{
+			StateAIInterface->SetAIState(AIState);
+		}
+
 		RunAI();
 	}
 }
@@ -42,10 +49,14 @@ void AStateAIController::OnPossess(APawn* InPawn)
 void AStateAIController::BeginDestroy()
 {
 	Super::BeginDestroy();
+
 	if (AIState)
 	{
-		GetWorld()->DestroyActor(AIState);
-		AIState = nullptr;
+		if (GetWorld())
+		{
+			GetWorld()->DestroyActor(AIState);
+			AIState = nullptr;
+		}
 	}
 }
 

@@ -37,8 +37,7 @@ void AIngredient::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
     DOREPLIFETIME(AIngredient, IngredientState);
 }
 
-void AIngredient::Server_ChangeIngredientState_Implementation(EIngredientState NewIngredientState)
+void AIngredient::Server_SetIngredientState_Implementation(EIngredientState NewIngredientState)
 {
-    if (IngredientState != EIngredientState::Raw) return;
     IngredientState = NewIngredientState;
 }
