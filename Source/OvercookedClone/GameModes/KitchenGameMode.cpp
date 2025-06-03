@@ -6,6 +6,35 @@
 #include "Characters/PlayerCharacter.h"
 #include "Actors/FinishStation.h"
 #include "Actors/CashRegister.h"
+#include "GameInstance/OvercookedGameInstance.h"
+#include "GameStates/KitchenGameState.h"
+#include "Kismet/GameplayStatics.h"
+
+void AKitchenGameMode::OpenResultLevel()
+{
+    SaveScore();
+
+    const FString ResultMapPath = "/Game/Maps/ResultMap";
+
+    switch (GetNetMode())
+    {
+        case NM_Standalone:
+            UGameplayStatics::OpenLevel(this, FName("ResultMap"));
+            break;
+
+        case NM_ListenServer:
+            GetWorld()->ServerTravel(ResultMapPath + "?listen");
+            break;
+
+        case NM_DedicatedServer:
+            GetWorld()->ServerTravel(ResultMapPath);
+            break;
+
+        default:
+            UE_LOG(LogTemp, Warning, TEXT("OpenResultLevel called on a client"));
+            break;
+    }
+}
 
 APawn* AKitchenGameMode::SpawnDefaultPawnFor_Implementation(AController* NewPlayer, AActor* StartSpot)
 {
@@ -23,4 +52,14 @@ APawn* AKitchenGameMode::SpawnDefaultPawnFor_Implementation(AController* NewPlay
     }
 
     return SpawnedPawn;
+}
+
+void AKitchenGameMode::SaveScore()
+{
+    AKitchenGameState* KitchenGameState = GetGameState<AKitchenGameState>();
+    if (KitchenGameState)
+    {
+        UOvercookedGameInstance* OvercookedGameInstance = Cast<UOvercookedGameInstance>(GetGameInstance());
+        OvercookedGameInstance->SetScore(KitchenGameState->GetScore());
+    }
 }

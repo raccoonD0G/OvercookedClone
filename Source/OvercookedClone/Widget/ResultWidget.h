@@ -14,7 +14,22 @@ class OVERCOOKEDCLONE_API UResultWidget : public UUserWidget
 {
 	GENERATED_BODY()
 	
-	
-	
-	
+protected:
+	virtual void NativeConstruct() override;
+
+public:
+	UFUNCTION()
+	void OpenEntryLevel();
+
+private:
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<class UTextBlock> ResultScoreText;
+
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<class UButton> BackToMainButton;
+
+	UFUNCTION()
+	void SetResultScoreText(float Score);
+
+
 };

@@ -19,6 +19,7 @@ public:
 
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const override;
+	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaSeconds) override;
 
 public:
@@ -57,5 +58,10 @@ private:
 
 	UPROPERTY(Replicated, VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
 	float Score;
+
+// Component Section
+private:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UTimerComponent> TimerComponent;
 	
 };

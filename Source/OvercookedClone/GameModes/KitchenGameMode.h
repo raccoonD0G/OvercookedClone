@@ -14,6 +14,13 @@ class OVERCOOKEDCLONE_API AKitchenGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 	
+public:
+	UFUNCTION()
+	void OpenResultLevel();
+
 protected:
 	virtual APawn* SpawnDefaultPawnFor_Implementation(AController* NewPlayer, AActor* StartSpot) override;
+
+private:
+	void SaveScore();
 };
