@@ -26,7 +26,7 @@ protected:
 	
 public:
 	UFUNCTION(BlueprintCallable)
-	void OnClicked();
+	bool OnClicked();
 
 	UFUNCTION(BlueprintCallable)
 	void ShowSuccessWidget();
@@ -46,8 +46,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void AddIngredientInfo(FIngredientInfo IngredientInfo);
 
-	UFUNCTION(BlueprintCallable)
-	FORCEINLINE bool GetIsCorrect() const { return bIsCorrect; }
 
 protected:
 	virtual void Interact(AActor* Caller) override;
@@ -61,9 +59,6 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "ture"))
 	TMap<ERecipeType, TSubclassOf<class AFood>> FoodClasses;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	uint8 bIsCorrect : 1;
 
 private:
 	UFUNCTION()

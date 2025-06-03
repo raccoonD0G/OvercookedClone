@@ -56,17 +56,23 @@ void AFinishStation::BeginPlay()
 	}
 }
 
-void AFinishStation::OnClicked()
+bool AFinishStation::OnClicked()
 {
 	URecipeSubsystem* RecipeSubsystem = GetGameInstance()->GetSubsystem<URecipeSubsystem>();
 
-	if (!RecipeSubsystem) return;
+	if (!RecipeSubsystem)
+	{
+		return false;
+	}
 
-	if (IngredientInfos.IsEmpty()) return;
+	if (IngredientInfos.IsEmpty())
+	{
+		return false;
+	}
 
 	TArray<FIngredientInfo> IngredientRequirements = RecipeSubsystem->GetRecipeByType(CurrentOrder.RecipeType).RequiredIngredients;
 
-	bIsCorrect = true;
+	bool bIsCorrect = true;
 
 	for (const auto& IngredientRequirement : IngredientRequirements)
 	{
@@ -99,6 +105,8 @@ void AFinishStation::OnClicked()
 	IngredientInfos.Empty();
 
 	OnIngredientInfosChange.Broadcast(IngredientInfos);
+
+	return bIsCorrect;
 }
 
 void AFinishStation::ShowSuccessWidget()
