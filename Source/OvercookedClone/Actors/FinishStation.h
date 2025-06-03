@@ -29,6 +29,12 @@ public:
 	void OnClicked();
 
 	UFUNCTION(BlueprintCallable)
+	void ShowSuccessWidget();
+
+	UFUNCTION(BlueprintCallable)
+	void ShowFailWidget();
+
+	UFUNCTION(BlueprintCallable)
 	void SetCurrentOrder(FOrder NewOrder);
 
 	UFUNCTION(BlueprintCallable)
@@ -39,6 +45,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void AddIngredientInfo(FIngredientInfo IngredientInfo);
+
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE bool GetIsCorrect() const { return bIsCorrect; }
 
 protected:
 	virtual void Interact(AActor* Caller) override;
@@ -53,6 +62,9 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "ture"))
 	TMap<ERecipeType, TSubclassOf<class AFood>> FoodClasses;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	uint8 bIsCorrect : 1;
+
 private:
 	UFUNCTION()
 	void OnRep_CurrentOrder();
@@ -60,8 +72,13 @@ private:
 	UFUNCTION()
 	void OnRep_Ingredients();
 
-
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UStaticMeshComponent> MeshComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UActorOwnableWidgetComponent> SuccessWidgetComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UActorOwnableWidgetComponent> FailWidgetComponent;
 };

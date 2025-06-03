@@ -11,6 +11,8 @@
 #include "HUD/KitchenHUD.h"
 #include "Net/UnrealNetwork.h"
 #include "Components/StaticMeshComponent.h"
+#include "Components/ActorOwnableWidgetComponent.h"
+#include "Widget/FloatingMessageWidget.h"
 
 AFinishStation::AFinishStation()
 {
@@ -19,6 +21,12 @@ AFinishStation::AFinishStation()
 
 	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
 	MeshComponent->SetupAttachment(RootComponent);
+
+	SuccessWidgetComponent = CreateDefaultSubobject<UActorOwnableWidgetComponent>(TEXT("SuccessWidgetComponent"));
+	SuccessWidgetComponent->SetupAttachment(RootComponent);
+
+	FailWidgetComponent = CreateDefaultSubobject<UActorOwnableWidgetComponent>(TEXT("FailWidgetComponent"));
+	FailWidgetComponent->SetupAttachment(RootComponent);
 }
 
 void AFinishStation::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -58,7 +66,7 @@ void AFinishStation::OnClicked()
 
 	TArray<FIngredientInfo> IngredientRequirements = RecipeSubsystem->GetRecipeByType(CurrentOrder.RecipeType).RequiredIngredients;
 
-	bool bIsCorrect = true;
+	bIsCorrect = true;
 
 	for (const auto& IngredientRequirement : IngredientRequirements)
 	{
@@ -82,7 +90,7 @@ void AFinishStation::OnClicked()
 
 	for (AActor* Child : AttachedActors)
 	{
-		if (IsValid(Child))
+		if (IsValid(Child) && Child->IsA<AIngredient>())
 		{
 			Child->Destroy();
 		}
@@ -91,6 +99,24 @@ void AFinishStation::OnClicked()
 	IngredientInfos.Empty();
 
 	OnIngredientInfosChange.Broadcast(IngredientInfos);
+}
+
+void AFinishStation::ShowSuccessWidget()
+{
+	UFloatingMessageWidget* SuccessWidget = Cast<UFloatingMessageWidget>(SuccessWidgetComponent->GetWidget());
+	if (SuccessWidget)
+	{
+		SuccessWidget->Start();
+	}
+}
+
+void AFinishStation::ShowFailWidget()
+{
+	UFloatingMessageWidget* FailWidget = Cast<UFloatingMessageWidget>(FailWidgetComponent->GetWidget());
+	if (FailWidget)
+	{
+		FailWidget->Start();
+	}
 }
 
 void AFinishStation::SetCurrentOrder(FOrder NewOrder)

@@ -15,5 +15,7 @@ AFood::AFood()
 	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
 	MeshComponent->SetupAttachment(RootComponent);
 	MeshComponent->SetCollisionProfileName(TEXT("NoCollision"));
+
+	bReplicates = true;
 }
 
