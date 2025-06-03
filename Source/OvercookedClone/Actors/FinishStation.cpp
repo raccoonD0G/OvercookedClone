@@ -10,13 +10,15 @@
 #include "Kismet/GameplayStatics.h"
 #include "HUD/KitchenHUD.h"
 #include "Net/UnrealNetwork.h"
-
+#include "Components/StaticMeshComponent.h"
 
 AFinishStation::AFinishStation()
 {
 	PrimaryActorTick.bCanEverTick = true;
 	bReplicates = true;
 
+	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
+	MeshComponent->SetupAttachment(RootComponent);
 }
 
 void AFinishStation::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -68,7 +70,9 @@ void AFinishStation::OnClicked()
 
 	if (bIsCorrect)
 	{
-		AFood* NewFood = GetWorld()->SpawnActor<AFood>(FoodClasses[CurrentOrder.RecipeType]);
+		FActorSpawnParameters SpawnParam;
+		SpawnParam.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+		AFood* NewFood = GetWorld()->SpawnActor<AFood>(FoodClasses[CurrentOrder.RecipeType], SpawnParam);
 		CurrentOrder.CustomerTable->PlaceFood(NewFood);
 		SetCurrentOrder(FOrder());
 	}

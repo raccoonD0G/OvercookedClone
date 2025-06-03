@@ -2,16 +2,18 @@
 
 
 #include "Actors/Food.h"
-
+#include "Components/SceneComponent.h"
+#include "Components/StaticMeshComponent.h"
 
 AFood::AFood()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	// StaticMeshComponent 생성
-	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
+	SceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("SceneComponent"));
+	RootComponent = SceneComponent;
 
-	// 루트 컴포넌트로 설정
-	RootComponent = MeshComponent;
+	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
+	MeshComponent->SetupAttachment(RootComponent);
+	MeshComponent->SetCollisionProfileName(TEXT("NoCollision"));
 }
 

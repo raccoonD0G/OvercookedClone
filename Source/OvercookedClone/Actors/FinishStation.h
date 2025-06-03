@@ -59,4 +59,9 @@ private:
 
 	UFUNCTION()
 	void OnRep_Ingredients();
+
+
+private:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UStaticMeshComponent> MeshComponent;
 };

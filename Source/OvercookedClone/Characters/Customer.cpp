@@ -134,6 +134,7 @@ void ACustomer::EndEating()
 		}
 	}
 
+	TargetTable->ClearFood();
 	CustomerState->SetCurrentState(ECustomerState::Exiting);
 }
 
