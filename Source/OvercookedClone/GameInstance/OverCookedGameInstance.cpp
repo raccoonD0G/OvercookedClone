@@ -8,6 +8,45 @@
 #include "OnlineSubsystemUtils.h"
 #include "Online/OnlineSessionNames.h"
 #include "Engine/Engine.h"
+#include "Interfaces/OnlineIdentityInterface.h"
+
+void UOvercookedGameInstance::Init()
+{
+    Super::Init();
+
+    FString Nickname = GetSteamNickname();
+    if (!Nickname.IsEmpty())
+    {
+        UE_LOG(LogTemp, Log, TEXT("Logged in as %s"), *Nickname);
+    }
+    else
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Steam nickname not found"));
+    }
+}
+
+FString UOvercookedGameInstance::GetSteamNickname() const
+{
+    IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
+    if (!Subsystem)
+    {
+        return FString();
+    }
+
+    IOnlineIdentityPtr Identity = Subsystem->GetIdentityInterface();
+    if (!Identity.IsValid())
+    {
+        return FString();
+    }
+
+    TSharedPtr<const FUniqueNetId> UserId = Identity->GetUniquePlayerId(0);
+    if (!UserId.IsValid())
+    {
+        return FString();
+    }
+
+    return Identity->GetPlayerNickname(*UserId);
+}
 
 void UOvercookedGameInstance::HostSession(FName SessionName)
 {
