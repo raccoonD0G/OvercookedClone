@@ -21,6 +21,7 @@ protected:
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInteractComponent> InteractComponent;
+	
 
 	UFUNCTION()
 	void Interact(AActor* Caller);

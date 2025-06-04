@@ -6,12 +6,19 @@
 #include "Interfaces/DestroyMouseInterface.h"
 #include "Components/InteractComponent.h"
 
+
 AMouse::AMouse()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
 	InteractComponent = CreateDefaultSubobject<UInteractComponent>(TEXT("InteractComponent"));
 	InteractComponent->SetupAttachment(RootComponent);
+
+	
+
+	//DeathEffect = CreateDefaultSubobject<UNiagaraSystem>(TEXT("InteractComponent"));
+	//DeathEffect->SetupAttachment(GetCapsuleComponent());
+
 }
 
 void AMouse::PostInitializeComponents()
@@ -35,6 +42,7 @@ void AMouse::Interact(AActor* Caller)
 {
 	if (Caller && Caller->GetClass()->ImplementsInterface(UDestroyMouseInterface::StaticClass()))
 	{
+	
 		IDestroyMouseInterface::Execute_DestroyMouse(Caller, this);
 	}
 }

@@ -10,6 +10,8 @@
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnFoodPlacedDelegate);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnOrderIgnoredDelegate);
 
+
+
 UCLASS()
 class OVERCOOKEDCLONE_API ACustomerTable : public AActor
 {
