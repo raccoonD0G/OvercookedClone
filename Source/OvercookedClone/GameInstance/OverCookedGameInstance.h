@@ -19,8 +19,14 @@ class OVERCOOKEDCLONE_API UOvercookedGameInstance : public UGameInstance
 	GENERATED_BODY()
 
 public:
-	FORCEINLINE void SetScore(float NewScore) { Score = NewScore; }
-	FORCEINLINE float GetScore() const { return Score; }
+        virtual void Init() override;
+
+        FORCEINLINE void SetScore(float NewScore) { Score = NewScore; }
+        FORCEINLINE float GetScore() const { return Score; }
+
+        /** Get player's Steam nickname */
+        UFUNCTION(BlueprintCallable, Category="Steam")
+        FString GetSteamNickname() const;
 
 private:
 	float Score;
