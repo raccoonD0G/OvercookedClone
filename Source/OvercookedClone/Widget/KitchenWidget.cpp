@@ -56,7 +56,10 @@ void UKitchenWidget::SetOrder(const FOrder& NewOrder)
 
 void UKitchenWidget::Init(AFinishStation* TargetFinishStation)
 {
-	FinishStation = TargetFinishStation;
-	FinishStation->OnIngredientInfosChange.AddDynamic(this, &UKitchenWidget::ResetIngredients);
-	FinishStation->OnOrderSet.AddDynamic(this, &UKitchenWidget::SetOrder);
+	if (TargetFinishStation)
+	{
+		FinishStation = TargetFinishStation;
+		FinishStation->OnIngredientInfosChange.AddDynamic(this, &UKitchenWidget::ResetIngredients);
+		FinishStation->OnOrderSet.AddDynamic(this, &UKitchenWidget::SetOrder);
+	}
 }

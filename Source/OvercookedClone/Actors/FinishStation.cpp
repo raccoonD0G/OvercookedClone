@@ -45,10 +45,10 @@ void AFinishStation::BeginPlay()
 		SetCurrentOrder(FOrder());
 	}
 
-	APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-	if (PC)
+	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	if (PlayerController)
 	{
-		AKitchenHUD* KitchenHUD = Cast<AKitchenHUD>(PC->GetHUD());
+		AKitchenHUD* KitchenHUD = Cast<AKitchenHUD>(PlayerController->GetHUD());
 		if (KitchenHUD)
 		{
 			KitchenHUD->SetFinishStation(this);
