@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "PlayerControllers/PlayerControllerBase.h"
-#include "KitchenPlayerController.generated.h"
+#include "EntryPlayerController.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class OVERCOOKEDCLONE_API AKitchenPlayerController : public APlayerControllerBase
+class OVERCOOKEDCLONE_API AEntryPlayerController : public APlayerControllerBase
 {
 	GENERATED_BODY()
 	

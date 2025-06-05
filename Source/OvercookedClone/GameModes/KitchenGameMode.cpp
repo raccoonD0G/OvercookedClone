@@ -14,6 +14,11 @@ void AKitchenGameMode::OpenResultLevel()
 {
     SaveScore();
 
+    if (AGameModeBase* GameMode = GetWorld()->GetAuthGameMode())
+    {
+        GameMode->bUseSeamlessTravel = true;
+    }
+
     const FString ResultMapPath = "/Game/Maps/ResultMap";
 
     switch (GetNetMode())

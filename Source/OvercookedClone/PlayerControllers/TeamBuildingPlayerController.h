@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/PlayerController.h"
+#include "PlayerControllers/PlayerControllerBase.h"
 #include "TeamBuildingPlayerController.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class OVERCOOKEDCLONE_API ATeamBuildingPlayerController : public APlayerController
+class OVERCOOKEDCLONE_API ATeamBuildingPlayerController : public APlayerControllerBase
 {
 	GENERATED_BODY()
 	

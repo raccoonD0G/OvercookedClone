@@ -31,7 +31,9 @@ void UResultWidget::OpenEntryLevel()
     UWorld* World = GetWorld();
     if (!World) return;
 
-    IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
+    UOvercookedGameInstance* OvercookedGameInstance = Cast<UOvercookedGameInstance>(GetGameInstance());
+    if (!OvercookedGameInstance) return;
+
 
     switch (PlayerController->GetNetMode())
     {
@@ -40,28 +42,12 @@ void UResultWidget::OpenEntryLevel()
         break;
 
     case NM_ListenServer:
-        if (Subsystem)
-        {
-            IOnlineSessionPtr SessionInterface = Subsystem->GetSessionInterface();
-            if (SessionInterface.IsValid())
-            {
-                SessionInterface->DestroySession(NAME_GameSession);
-            }
-        }
-
+        OvercookedGameInstance->DestroySession();
         PlayerController->ClientTravel(ResultMapPath, TRAVEL_Absolute);
         break;
 
     case NM_Client:
-        if (Subsystem)
-        {
-            IOnlineSessionPtr SessionInterface = Subsystem->GetSessionInterface();
-            if (SessionInterface.IsValid())
-            {
-                SessionInterface->DestroySession(NAME_GameSession);
-            }
-        }
-
+        OvercookedGameInstance->DestroySession();
         PlayerController->ClientTravel(ResultMapPath, TRAVEL_Absolute);
         break;
 

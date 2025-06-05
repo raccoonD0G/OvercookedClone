@@ -14,7 +14,12 @@ class OVERCOOKEDCLONE_API ATeamBuildingGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 	
-	
-	
-	
+public:
+	ATeamBuildingGameMode();
+
+	virtual void PostLogin(APlayerController* NewPlayer) override;
+	virtual void Logout(AController* Exiting) override;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	int32 PlayerCount;
 };

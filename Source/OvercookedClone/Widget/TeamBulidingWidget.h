@@ -14,12 +14,20 @@ class OVERCOOKEDCLONE_API UTeamBulidingWidget : public UUserWidget
 {
 	GENERATED_BODY()
 	
-	
+protected:
+	virtual void NativeConstruct() override;
+
 private:
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<class UButton> GameStartButton;
 
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<class UTextBlock> PlayerCountText;
+
+private:
+	UFUNCTION()
+	void OnGameStartButtonClicked();
 	
+	UFUNCTION()
+	void UpdatePlayerCount(int32 NewPlayerCount);
 };

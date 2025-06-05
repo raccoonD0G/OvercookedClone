@@ -9,10 +9,25 @@
 #include "Online/OnlineSessionNames.h"
 #include "Engine/Engine.h"
 #include "Interfaces/OnlineIdentityInterface.h"
+#include "Kismet/GameplayStatics.h"
+#include "GameFramework/GameUserSettings.h"
+#include "PlayerControllers/PlayerControllerBase.h"
+#include "Gameframework/GameModeBase.h"
 
 void UOvercookedGameInstance::Init()
 {
     Super::Init();
+
+    if (GEngine)
+    {
+        UGameUserSettings* Settings = GEngine->GetGameUserSettings();
+        if (Settings)
+        {
+            Settings->SetFullscreenMode(EWindowMode::Windowed);
+            Settings->SetScreenResolution(FIntPoint(1280, 720));
+            Settings->ApplySettings(false);
+        }
+    }
 
     FString Nickname = GetSteamNickname();
     if (!Nickname.IsEmpty())
@@ -48,7 +63,7 @@ FString UOvercookedGameInstance::GetSteamNickname() const
     return Identity->GetPlayerNickname(*UserId);
 }
 
-void UOvercookedGameInstance::HostSession(FName SessionName)
+void UOvercookedGameInstance::HostSession()
 {
     IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
     if (Subsystem)
@@ -61,26 +76,33 @@ void UOvercookedGameInstance::HostSession(FName SessionName)
 
             FOnlineSessionSettings SessionSettings;
             SessionSettings.bIsLANMatch = false;
-            SessionSettings.NumPublicConnections = 1;
+            SessionSettings.bIsDedicated = false;
+            SessionSettings.NumPublicConnections = 2;
             SessionSettings.bShouldAdvertise = true;
+            SessionSettings.bUseLobbiesIfAvailable = true;
             SessionSettings.bUsesPresence = true;
             SessionSettings.bAllowJoinInProgress = true;
+            SessionSettings.bAllowJoinViaPresence = true;
+            SessionSettings.bAllowJoinViaPresenceFriendsOnly = false;
+            
+            SessionSettings.Set(FName("GameId"), FString("OvercookedClone"), EOnlineDataAdvertisementType::ViaOnlineService);
+            SessionSettings.Set(FName("roomName"), FString("TestRoom"), EOnlineDataAdvertisementType::ViaOnlineService);
 
-            SessionInterface->CreateSession(0, SessionName, SessionSettings);
+            SessionInterface->CreateSession(0, NAME_GameSession, SessionSettings);
         }
     }
 }
 
+
 void UOvercookedGameInstance::OnCreateSessionComplete(FName SessionName, bool bWasSuccessful)
 {
     IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
-    if (Subsystem)
+    if (!Subsystem) return;
+
+    IOnlineSessionPtr SessionInterface = Subsystem->GetSessionInterface();
+    if (SessionInterface.IsValid())
     {
-        IOnlineSessionPtr SessionInterface = Subsystem->GetSessionInterface();
-        if (SessionInterface.IsValid())
-        {
-            SessionInterface->ClearOnCreateSessionCompleteDelegate_Handle(OnCreateSessionCompleteDelegateHandle);
-        }
+        SessionInterface->ClearOnCreateSessionCompleteDelegate_Handle(OnCreateSessionCompleteDelegateHandle);
     }
 
     if (bWasSuccessful)
@@ -91,31 +113,28 @@ void UOvercookedGameInstance::OnCreateSessionComplete(FName SessionName, bool bW
             World->ServerTravel("/Game/Maps/TeamBuildingMap?listen");
         }
     }
-    else
-    {
-        UE_LOG(LogTemp, Error, TEXT("세션 생성 실패"));
-    }
 }
+
 
 void UOvercookedGameInstance::JoinSession()
 {
     IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
-    if (Subsystem)
-    {
-        IOnlineSessionPtr SessionInterface = Subsystem->GetSessionInterface();
-        if (SessionInterface.IsValid())
-        {
-            SessionSearch = MakeShareable(new FOnlineSessionSearch());
-            SessionSearch->bIsLanQuery = false;
-            SessionSearch->MaxSearchResults = 20;
-            SessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals);
+    if (!Subsystem) return;
 
-            OnFindSessionsCompleteDelegate = FOnFindSessionsCompleteDelegate::CreateUObject(this, &UOvercookedGameInstance::OnFindSessionsComplete);
-            OnFindSessionsCompleteDelegateHandle = SessionInterface->AddOnFindSessionsCompleteDelegate_Handle(OnFindSessionsCompleteDelegate);
+    IOnlineSessionPtr SessionInterface = Subsystem->GetSessionInterface();
+    if (!SessionInterface.IsValid()) return;
 
-            SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
-        }
-    }
+    SessionSearch = MakeShareable(new FOnlineSessionSearch());
+    SessionSearch->bIsLanQuery = false;
+    SessionSearch->MaxSearchResults = 20;
+    SessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals);
+
+    SessionSearch->QuerySettings.Set(FName("GameId"), FString("OvercookedClone"), EOnlineComparisonOp::Equals);
+
+    OnFindSessionsCompleteDelegate = FOnFindSessionsCompleteDelegate::CreateUObject(this, &UOvercookedGameInstance::OnFindSessionsComplete);
+    OnFindSessionsCompleteDelegateHandle = SessionInterface->AddOnFindSessionsCompleteDelegate_Handle(OnFindSessionsCompleteDelegate);
+
+    SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
 }
 
 void UOvercookedGameInstance::OnFindSessionsComplete(bool bWasSuccessful)
@@ -133,8 +152,28 @@ void UOvercookedGameInstance::OnFindSessionsComplete(bool bWasSuccessful)
     {
         UE_LOG(LogTemp, Log, TEXT("세션 %d개 발견"), SessionSearch->SearchResults.Num());
 
-        // 첫 번째 세션에 바로 참가
-        const FOnlineSessionSearchResult& Result = SessionSearch->SearchResults[0];
+        for (int32 Index = 0; Index < SessionSearch->SearchResults.Num(); ++Index)
+        {
+            FOnlineSessionSearchResult Result = SessionSearch->SearchResults[Index];
+
+            FString RoomName, GameId;
+            Result.Session.SessionSettings.Get(FName("roomName"), RoomName);
+            Result.Session.SessionSettings.Get(FName("GameId"), GameId);
+
+            FString SessionIdStr = Result.GetSessionIdStr();
+            FString OwnerName = Result.Session.OwningUserName;
+
+            UE_LOG(LogTemp, Log, TEXT("세션[%d]: Owner=%s, RoomName=%s, GameId=%s, SessionId=%s"),
+                Index, *OwnerName, *RoomName, *GameId, *SessionIdStr);
+        }
+
+        // 참가 시도
+        FOnlineSessionSearchResult Result = SessionSearch->SearchResults[0];
+
+        FOnlineSessionSearchResult& ModifiableSessionResult = const_cast<FOnlineSessionSearchResult&>(Result);
+        FOnlineSessionSettings& SessionSettings = ModifiableSessionResult.Session.SessionSettings;
+        SessionSettings.bUsesPresence = true;
+        SessionSettings.bUseLobbiesIfAvailable = true;
 
         OnJoinSessionCompleteDelegate = FOnJoinSessionCompleteDelegate::CreateUObject(this, &UOvercookedGameInstance::OnJoinSessionComplete);
         OnJoinSessionCompleteDelegateHandle = SessionInterface->AddOnJoinSessionCompleteDelegate_Handle(OnJoinSessionCompleteDelegate);
@@ -160,15 +199,19 @@ void UOvercookedGameInstance::OnJoinSessionComplete(FName SessionName, EOnJoinSe
         FString ConnectString;
         if (SessionInterface->GetResolvedConnectString(SessionName, ConnectString))
         {
-            APlayerController* PC = GetFirstLocalPlayerController();
-            if (PC)
+            UE_LOG(LogTemp, Log, TEXT("Resolved Connect String: %s"), *ConnectString);
+
+            APlayerControllerBase* PlayerControllerBase = Cast<APlayerControllerBase>(GetFirstLocalPlayerController());
+            if (PlayerControllerBase)
             {
-                PC->ClientTravel(ConnectString, TRAVEL_Absolute);
+                PlayerControllerBase->SetConnectString(ConnectString);
+                PlayerControllerBase->ClientTravel(ConnectString, TRAVEL_Absolute, true);
+                UE_LOG(LogTemp, Log, TEXT("Done Connect String: %s"), *ConnectString);
             }
         }
         else
         {
-            UE_LOG(LogTemp, Error, TEXT("접속 주소를 얻을 수 없습니다."));
+            UE_LOG(LogTemp, Warning, TEXT("접속 주소 없음."));
         }
     }
 }
@@ -184,13 +227,10 @@ void UOvercookedGameInstance::DestroySession()
             OnDestroySessionCompleteDelegate = FOnDestroySessionCompleteDelegate::CreateUObject(this, &UOvercookedGameInstance::OnDestroySessionComplete);
             OnDestroySessionCompleteDelegateHandle = SessionInterface->AddOnDestroySessionCompleteDelegate_Handle(OnDestroySessionCompleteDelegate);
 
-            const FName SessionName = NAME_GameSession;
-
-            // 세션 존재 여부 확인 후 제거
-            if (SessionInterface->GetNamedSession(SessionName) != nullptr)
+            if (SessionInterface->GetNamedSession(NAME_GameSession) != nullptr)
             {
                 UE_LOG(LogTemp, Log, TEXT("세션 제거 시도 중..."));
-                SessionInterface->DestroySession(SessionName);
+                SessionInterface->DestroySession(NAME_GameSession);
             }
             else
             {

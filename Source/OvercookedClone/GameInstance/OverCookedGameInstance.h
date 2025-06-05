@@ -24,8 +24,7 @@ public:
         FORCEINLINE void SetScore(float NewScore) { Score = NewScore; }
         FORCEINLINE float GetScore() const { return Score; }
 
-        /** Get player's Steam nickname */
-        UFUNCTION(BlueprintCallable, Category="Steam")
+        UFUNCTION(BlueprintCallable)
         FString GetSteamNickname() const;
 
 private:
@@ -33,7 +32,7 @@ private:
 
 public:
     UFUNCTION(BlueprintCallable)
-    void HostSession(FName SessionName);
+    void HostSession();
 
     UFUNCTION(BlueprintCallable)
     void JoinSession();
