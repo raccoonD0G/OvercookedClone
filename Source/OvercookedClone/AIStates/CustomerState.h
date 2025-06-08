@@ -17,7 +17,7 @@ enum class ECustomerState : uint8
 	Exiting
 };
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCurrentStateChangeDelegate, ECustomerState, NewState);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCustomerStateChangeDelegate, ECustomerState, NewState);
 
 /**
  * 
@@ -37,13 +37,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	ECustomerState GetCurrentState() const;
 
-
-	FOnCurrentStateChangeDelegate OnCurrentStateChange;
+	FOnCustomerStateChangeDelegate OnCurrentStateChange;
 
 private:
 	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	ECustomerState CurrentState;
-
-
-	
 };

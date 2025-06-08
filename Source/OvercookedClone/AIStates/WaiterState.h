@@ -4,23 +4,25 @@
 
 #include "CoreMinimal.h"
 #include "AIStates/AIState.h"
-#include "MouseState.generated.h"
+#include "WaiterState.generated.h"
 
 UENUM(BlueprintType)
-enum class EMouseState : uint8
+enum class EWaiterState : uint8
 {
 	None,
 	MoveToRandomPos,
 	WaitForNextMove,
+	MoveToFinishStation,
+	MoveToTable,
 };
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMouseStateChangeDelegate, EMouseState, NewState);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnWaiterStateChangeDelegate, EWaiterState, NewState);
 
 /**
  * 
  */
 UCLASS()
-class OVERCOOKEDCLONE_API AMouseState : public AAIState
+class OVERCOOKEDCLONE_API AWaiterState : public AAIState
 {
 	GENERATED_BODY()
 	
@@ -29,16 +31,16 @@ protected:
 
 public:
 	UFUNCTION(BlueprintCallable)
-	void SetCurrentState(EMouseState NewState);
+	void SetCurrentState(EWaiterState NewState);
 
 	UFUNCTION(BlueprintCallable)
-	EMouseState GetCurrentState() const;
+	EWaiterState GetCurrentState() const;
 
-	FOnMouseStateChangeDelegate OnCurrentStateChange;
+	FOnWaiterStateChangeDelegate OnCurrentStateChange;
 
 private:
 	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	EMouseState CurrentState;
+	EWaiterState CurrentState;
 	
 	
 };

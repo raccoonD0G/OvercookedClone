@@ -4,25 +4,24 @@
 
 #include "CoreMinimal.h"
 #include "AIControllers/StateAIController.h"
-#include "AIStates/MouseState.h"
-#include "MouseController.generated.h"
+#include "AIStates/WaiterState.h"
+#include "WaiterController.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class OVERCOOKEDCLONE_API AMouseController : public AStateAIController
+class OVERCOOKEDCLONE_API AWaiterController : public AStateAIController
 {
 	GENERATED_BODY()
-	
 	
 protected:
 	virtual void OnPossess(APawn* InPawn) override;
 
 private:
 	UFUNCTION()
-	void OnCurrentStateChange(EMouseState NewState);
-	
+	void OnCurrentStateChange(EWaiterState NewState);
+
 	
 	
 };

@@ -11,6 +11,7 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnIngredientInfosChangeDelegate, const TArray<FIngredientInfo>&, IngredientInfos);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnOrderSetDelegate, const FOrder&, NewOrder);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCookSuccessDelegate, const FOrder&, SuccessOrder);
 
 UCLASS()
 class OVERCOOKEDCLONE_API AFinishStation : public AInteractableBase
@@ -42,10 +43,13 @@ public:
 
 	FOnIngredientInfosChangeDelegate OnIngredientInfosChange;
 	FOnOrderSetDelegate OnOrderSet;
+	FOnCookSuccessDelegate OnCookSuccess;
 
 	UFUNCTION(BlueprintCallable)
 	void AddIngredientInfo(FIngredientInfo IngredientInfo);
 
+	FORCEINLINE class AFood* GetFoodOnTable() const { return FoodOnTable; }
+	FORCEINLINE void SetFoodOnTable(class AFood* NewFood) { FoodOnTable = NewFood; }
 
 protected:
 	virtual void Interact(AActor* Caller) override;
@@ -56,6 +60,9 @@ private:
 
 	UPROPERTY(ReplicatedUsing = OnRep_CurrentOrder, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	FOrder CurrentOrder;
+
+	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class AFood> FoodOnTable;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "ture"))
 	TMap<ERecipeType, TSubclassOf<class AFood>> FoodClasses;

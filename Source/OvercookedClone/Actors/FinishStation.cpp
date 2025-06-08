@@ -34,6 +34,7 @@ void AFinishStation::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(AFinishStation, CurrentOrder);
 	DOREPLIFETIME(AFinishStation, IngredientInfos);
+	DOREPLIFETIME(AFinishStation, FoodOnTable);
 }
 
 void AFinishStation::BeginPlay()
@@ -87,7 +88,11 @@ bool AFinishStation::OnClicked()
 		FActorSpawnParameters SpawnParam;
 		SpawnParam.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 		AFood* NewFood = GetWorld()->SpawnActor<AFood>(FoodClasses[CurrentOrder.RecipeType], SpawnParam);
-		CurrentOrder.CustomerTable->PlaceFood(NewFood);
+		OnCookSuccess.Broadcast(CurrentOrder);
+		SetFoodOnTable(NewFood);
+		FAttachmentTransformRules AttachmentTransformRules = FAttachmentTransformRules::SnapToTargetNotIncludingScale;
+		NewFood->AttachToComponent(MeshComponent, AttachmentTransformRules, TEXT("TableTop"));
+
 		SetCurrentOrder(FOrder());
 	}
 
@@ -157,6 +162,11 @@ void AFinishStation::Interact(AActor* Caller)
 	Super::Interact(Caller);
 
 	if (!Caller || !Caller->GetClass()->ImplementsInterface(UFinishStationInteractInterface::StaticClass()))
+	{
+		return;
+	}
+
+	if (FoodOnTable)
 	{
 		return;
 	}

@@ -5,6 +5,8 @@
 #include "GameStates/KitchenGameState.h"
 #include "Interfaces/DestroyMouseInterface.h"
 #include "Components/InteractComponent.h"
+#include "AIControllers/StateAIController.h"
+#include "AIStates/MouseState.h"
 
 AMouse::AMouse()
 {
@@ -37,4 +39,24 @@ void AMouse::Interact(AActor* Caller)
 	{
 		IDestroyMouseInterface::Execute_DestroyMouse(Caller, this);
 	}
+}
+
+void AMouse::EndMoveToRandomPos()
+{
+	AStateAIController* StateAIController = Cast<AStateAIController>(GetController());
+	check(StateAIController);
+	AMouseState* MouseState = Cast<AMouseState>(StateAIController->GetAIState());
+	check(MouseState);
+
+	MouseState->SetCurrentState(EMouseState::WaitForNextMove);
+}
+
+void AMouse::EndWaitForNextMove()
+{
+	AStateAIController* StateAIController = Cast<AStateAIController>(GetController());
+	check(StateAIController);
+	AMouseState* MouseState = Cast<AMouseState>(StateAIController->GetAIState());
+	check(MouseState);
+
+	MouseState->SetCurrentState(EMouseState::MoveToRandomPos);
 }

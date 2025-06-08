@@ -12,10 +12,14 @@ AFood::AFood()
 	SceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("SceneComponent"));
 	RootComponent = SceneComponent;
 
-	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
-	MeshComponent->SetupAttachment(RootComponent);
-	MeshComponent->SetCollisionProfileName(TEXT("NoCollision"));
-
+	FoodMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("FoodMeshComponent"));
+	FoodMeshComponent->SetupAttachment(RootComponent);
+	FoodMeshComponent->SetCollisionProfileName(TEXT("NoCollision"));
+	
+	DishMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("DishMeshComponent"));
+	DishMeshComponent->SetupAttachment(RootComponent);
+	DishMeshComponent->SetCollisionProfileName(TEXT("NoCollision"));
+	
 	bReplicates = true;
 }
 

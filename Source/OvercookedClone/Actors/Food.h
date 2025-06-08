@@ -19,5 +19,8 @@ protected:
 	TObjectPtr<class USceneComponent> SceneComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TObjectPtr<class UStaticMeshComponent> MeshComponent;
+	TObjectPtr<class UStaticMeshComponent> FoodMeshComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<class UStaticMeshComponent> DishMeshComponent;
 };

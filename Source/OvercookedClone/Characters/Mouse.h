@@ -4,10 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "Characters/StateAICharacter.h"
+#include "Interfaces/MoveToRandomPosInterface.h"
+#include "Interfaces/WaitForNextMoveInterface.h"
 #include "Mouse.generated.h"
 
 UCLASS()
-class OVERCOOKEDCLONE_API AMouse : public AStateAICharacter
+class OVERCOOKEDCLONE_API AMouse : public AStateAICharacter, public IMoveToRandomPosInterface, public IWaitForNextMoveInterface
 {
 	GENERATED_BODY()
 	
@@ -24,4 +26,8 @@ private:
 
 	UFUNCTION()
 	void Interact(AActor* Caller);
+
+	virtual void EndMoveToRandomPos() override;
+
+	virtual void EndWaitForNextMove() override;
 };
