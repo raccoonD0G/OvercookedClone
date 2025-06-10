@@ -23,6 +23,9 @@ AIngredient::AIngredient()
 
     // 클래스 이름을 텍스트로 설정
     FString ClassName = GetClass()->GetName();
+    ClassName.RemoveFromStart(TEXT("BP_"));
+    ClassName.RemoveFromEnd(TEXT("_C"));
+
     TextComponent->SetText(FText::FromString(ClassName));
 
     // 텍스트 위치 조정
